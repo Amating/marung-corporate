@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Marung Sebaka Technologies — Inclusive Innovation for Everyday Life</title>
+<meta name="description" content="Marung Sebaka Technologies is a South African technology company focused on fintech, healthtech and agritech solutions that expand access, support participation and strengthen socio-economic progress.">
+<meta property="og:title" content="Marung Sebaka Technologies">
+<meta property="og:description" content="Inclusive innovation for everyday life. South African technology company building across fintech, healthtech and agritech.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#09111C;--deep:#0D1A28;--panel:#111F30;--border:#1C3049;
+  --sky:#5BAFD4;--ice:#A8D8F0;--gold:#C4A35A;--goldl:#EDD98A;
+  --white:#EEF4FA;--fog:#6E8DA6;--mist:#2A4560;--dim:#182F45;
+  --green:#2FC48A;
+  --P:'Cormorant Garamond',Georgia,serif;
+  --B:'Outfit',system-ui,sans-serif;
+  --M:'DM Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--white);font-family:var(--B);font-weight:400;overflow-x:hidden;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 7vw;background:rgba(9,17,28,0.96);backdrop-filter:blur(24px);border-bottom:1px solid rgba(91,175,212,0.07)}
+.nav-brand{display:flex;align-items:center;gap:12px;cursor:pointer;text-decoration:none;background:none;border:none}
+.nav-mark{width:36px;height:36px;border-radius:8px;background:linear-gradient(140deg,var(--sky) 0%,#2A6FA8 100%);display:flex;align-items:center;justify-content:center;font-family:var(--P);font-size:17px;font-weight:700;color:var(--white);letter-spacing:-0.5px}
+.nav-wordmark{font-family:var(--P);font-size:1.15rem;font-weight:600;color:var(--white);letter-spacing:0.01em;line-height:1.1}
+.nav-wordmark small{display:block;font-family:var(--M);font-size:.52rem;color:var(--fog);letter-spacing:.18em;text-transform:uppercase;font-weight:400;margin-top:1px}
+.nav-links{display:flex;align-items:center;gap:2.25rem}
+.nav-links a{font-size:.82rem;font-weight:500;color:var(--fog);text-decoration:none;cursor:pointer;background:none;border:none;font-family:var(--B);transition:color .2s;letter-spacing:0.03em}
+.nav-links a:hover,.nav-links a.on{color:var(--white)}
+.nav-cta{border:1px solid rgba(91,175,212,0.3);color:var(--sky);background:transparent;border-radius:8px;padding:9px 22px;font-size:.8rem;font-weight:500;cursor:pointer;font-family:var(--B);letter-spacing:0.04em;transition:all .25s}
+.nav-cta:hover{background:rgba(91,175,212,0.08);border-color:var(--sky)}
+.hbg{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px}
+.hbg span{display:block;width:22px;height:1.5px;background:var(--fog);border-radius:2px;transition:all .3s}
+.mob{display:none;position:fixed;top:68px;left:0;right:0;background:var(--deep);border-bottom:1px solid var(--border);padding:1.75rem 7vw;z-index:199;flex-direction:column;gap:.5rem}
+.mob.open{display:flex}
+.mob a{font-size:.95rem;font-weight:400;color:var(--fog);text-decoration:none;padding:.65rem 0;border-bottom:1px solid var(--border);cursor:pointer;background:none;border-left:none;border-right:none;border-top:none;font-family:var(--B);letter-spacing:.02em;transition:color .2s}
+.mob a:last-of-type{border-bottom:none}
+.mob a:hover{color:var(--white)}
+
+/* ── PAGES ── */
+.pg{display:none;padding-top:68px;min-height:100vh}
+.pg.on{display:block}
+
+/* ── REVEAL ── */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .65s ease,transform .65s ease}
+.rv.in{opacity:1;transform:none}
+.rv2{transition-delay:.1s}
+.rv3{transition-delay:.2s}
+.rv4{transition-delay:.3s}
+
+/* ── SHARED ── */
+.wrap{max-width:1080px;margin:0 auto;padding:0 7vw}
+.sec{padding:7rem 7vw}
+.stag{font-family:var(--M);font-size:.62rem;color:var(--sky);letter-spacing:.2em;text-transform:uppercase;margin-bottom:1.1rem;display:block}
+.sh2{font-family:var(--P);font-size:clamp(2rem,4.5vw,3.2rem);font-weight:600;line-height:1.1;color:var(--white);margin-bottom:1.25rem;letter-spacing:-0.01em}
+.sh2 em{color:var(--sky);font-style:italic}
+.sh2 .g{color:var(--gold);font-style:italic}
+.sbody{font-size:.95rem;color:var(--fog);line-height:1.95;max-width:580px;font-weight:300}
+.sbody + .sbody{margin-top:.9rem}
+.rule{height:1px;background:linear-gradient(90deg,transparent,rgba(91,175,212,0.12),transparent);margin:0}
+
+/* ── HOME HERO ── */
+.hero{min-height:calc(100vh - 68px);display:flex;align-items:center;padding:6rem 7vw;position:relative;overflow:hidden}
+.hero-noise{position:absolute;inset:0;opacity:.018;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");pointer-events:none}
+.hero-glow{position:absolute;top:10%;right:5%;width:55%;height:70%;background:radial-gradient(ellipse,rgba(91,175,212,0.045) 0%,transparent 70%);pointer-events:none}
+.hero-glow2{position:absolute;bottom:5%;left:0%;width:35%;height:50%;background:radial-gradient(ellipse,rgba(196,163,90,0.03) 0%,transparent 70%);pointer-events:none}
+.hero-inner{max-width:760px;position:relative;z-index:1}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.6rem;margin-bottom:2.75rem}
+.hero-dot{width:7px;height:7px;border-radius:50%;background:var(--sky);animation:breathe 3s ease-in-out infinite}
+@keyframes breathe{0%,100%{opacity:.5;transform:scale(0.85)}50%{opacity:1;transform:scale(1)}}
+.hero-eyebrow span{font-family:var(--M);font-size:.62rem;color:var(--fog);letter-spacing:.18em;text-transform:uppercase}
+.hero-h1{font-family:var(--P);font-size:clamp(3rem,8vw,6rem);font-weight:600;line-height:1.0;color:var(--white);margin-bottom:2rem;letter-spacing:-0.025em}
+.hero-h1 em{font-style:italic;color:var(--sky);display:block}
+.hero-body{font-size:1.05rem;color:var(--fog);line-height:1.9;margin-bottom:3rem;max-width:540px;font-weight:300}
+.hero-body strong{color:var(--white);font-weight:500}
+.hero-acts{display:flex;gap:1rem;flex-wrap:wrap;align-items:center}
+.btn-pri{background:var(--sky);color:var(--ink);border:none;border-radius:9px;padding:14px 30px;font-size:.88rem;font-weight:600;cursor:pointer;font-family:var(--B);letter-spacing:.03em;transition:all .22s;text-decoration:none;display:inline-block}
+.btn-pri:hover{opacity:.88;transform:translateY(-1px)}
+.btn-sec{background:transparent;color:var(--fog);border:1px solid var(--border);border-radius:9px;padding:14px 28px;font-size:.88rem;font-weight:400;cursor:pointer;font-family:var(--B);letter-spacing:.03em;transition:all .22s;text-decoration:none;display:inline-block}
+.btn-sec:hover{border-color:rgba(91,175,212,0.3);color:var(--white)}
+.hero-rule{width:100%;height:1px;background:linear-gradient(90deg,rgba(91,175,212,0.15),transparent);margin-top:5rem}
+
+/* ── PILLARS (HOME) ── */
+.pillars{background:var(--deep);padding:6rem 7vw;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.pillars-inner{max-width:1080px;margin:0 auto}
+.pillars-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5px;margin-top:3.5rem;background:var(--border);border:1.5px solid var(--border);border-radius:16px;overflow:hidden}
+.pillar{background:var(--panel);padding:2.5rem 2rem;transition:background .25s}
+.pillar:hover{background:var(--dim)}
+.pillar-ic{font-size:1.5rem;margin-bottom:1.5rem;display:block}
+.pillar-t{font-family:var(--P);font-size:1.2rem;font-weight:600;color:var(--white);margin-bottom:.6rem;letter-spacing:-.005em}
+.pillar-b{font-size:.86rem;color:var(--fog);line-height:1.8;font-weight:300}
+
+/* ── INCLUSION STRIP (HOME) ── */
+.incl-strip{padding:6rem 7vw;background:var(--ink)}
+.incl-inner{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
+.incl-text{}
+.incl-quote{margin-top:2.5rem;padding:2rem 2.25rem;border-left:2px solid var(--gold);background:rgba(196,163,90,0.04);border-radius:0 12px 12px 0}
+.incl-quote p{font-family:var(--P);font-size:1.1rem;font-style:italic;color:var(--goldl);line-height:1.75}
+.incl-pillars{display:flex;flex-direction:column;gap:1px;background:var(--border);border:1.5px solid var(--border);border-radius:14px;overflow:hidden}
+.ip{background:var(--panel);padding:1.5rem 1.75rem;display:flex;align-items:flex-start;gap:1rem}
+.ip-dot{width:8px;height:8px;border-radius:50%;background:var(--sky);flex-shrink:0;margin-top:.35rem}
+.ip-t{font-family:var(--P);font-size:1rem;font-weight:600;color:var(--white);margin-bottom:.25rem}
+.ip-b{font-size:.83rem;color:var(--fog);line-height:1.75;font-weight:300}
+
+/* ── CTA STRIP ── */
+.cta-strip{background:var(--panel);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:5rem 7vw;text-align:center}
+.cta-strip .sh2{margin:0 auto 1rem;max-width:600px}
+.cta-strip .sbody{margin:0 auto 2.5rem;text-align:center}
+.cta-acts{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+
+/* ── ABOUT PAGE ── */
+.about-hero{padding:6rem 7vw 4rem;background:var(--deep);border-bottom:1px solid var(--border)}
+.about-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:5rem;align-items:start;max-width:1080px;margin:0 auto}
+.founder-panel{background:var(--panel);border:1px solid var(--border);border-radius:18px;padding:2.5rem;position:sticky;top:88px}
+.fp-avatar{width:72px;height:72px;border-radius:16px;background:linear-gradient(140deg,var(--sky),#2A6FA8);display:flex;align-items:center;justify-content:center;font-family:var(--P);font-size:2rem;font-weight:700;color:var(--white);margin-bottom:1.5rem}
+.fp-name{font-family:var(--P);font-size:1.25rem;font-weight:600;color:var(--white);margin-bottom:.2rem}
+.fp-role{font-family:var(--M);font-size:.6rem;color:var(--sky);letter-spacing:.14em;text-transform:uppercase;margin-bottom:1.5rem}
+.fp-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.5rem}
+.ftag{background:rgba(91,175,212,0.07);border:1px solid rgba(91,175,212,0.15);border-radius:100px;padding:.2rem .75rem;font-size:.68rem;color:var(--sky);font-family:var(--M);letter-spacing:.04em}
+.fp-body{font-size:.84rem;color:var(--fog);line-height:1.85;font-weight:300;border-top:1px solid var(--border);padding-top:1.25rem}
+.fp-email{display:block;margin-top:1rem;font-size:.8rem;color:var(--sky);text-decoration:none;font-family:var(--M);letter-spacing:.03em}
+.about-story h3{font-family:var(--P);font-size:1.6rem;font-weight:600;color:var(--white);margin-bottom:1rem;letter-spacing:-.01em}
+.about-story p{font-size:.93rem;color:var(--fog);line-height:1.95;margin-bottom:1.1rem;font-weight:300}
+.about-story blockquote{margin:2.5rem 0;padding:1.5rem 2rem;border-left:2px solid var(--gold);background:rgba(196,163,90,0.04);border-radius:0 12px 12px 0}
+.about-story blockquote p{font-family:var(--P);font-size:1.1rem;font-style:italic;color:var(--goldl);margin:0;line-height:1.7}
+.about-story blockquote cite{display:block;margin-top:.75rem;font-family:var(--M);font-size:.62rem;color:var(--fog);font-style:normal;letter-spacing:.08em}
+.values-sec{padding:5rem 7vw;background:var(--ink);border-top:1px solid var(--border)}
+.vals-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5px;margin-top:3rem;background:var(--border);border:1.5px solid var(--border);border-radius:16px;overflow:hidden;max-width:1080px;margin-left:auto;margin-right:auto}
+.val{background:var(--panel);padding:2rem 1.75rem}
+.val-ic{font-size:1.3rem;margin-bottom:1rem;display:block}
+.val-t{font-family:var(--P);font-size:1rem;font-weight:600;color:var(--white);margin-bottom:.4rem}
+.val-b{font-size:.83rem;color:var(--fog);line-height:1.8;font-weight:300}
+
+/* ── FOCUS PAGE ── */
+.focus-hero{padding:6rem 7vw 4rem;background:var(--deep);border-bottom:1px solid var(--border)}
+.focus-sec{padding:5rem 7vw;background:var(--ink)}
+.focus-inner{max-width:1080px;margin:0 auto}
+.focus-blocks{display:flex;flex-direction:column;gap:1.5px;background:var(--border);border:1.5px solid var(--border);border-radius:16px;overflow:hidden;margin-top:3rem}
+.fb-block{background:var(--panel);padding:3rem 2.75rem;display:grid;grid-template-columns:200px 1fr;gap:3rem;align-items:start;transition:background .25s}
+.fb-block:hover{background:var(--dim)}
+.fb-label{font-family:var(--P);font-size:1.6rem;font-weight:600;color:var(--white);letter-spacing:-.01em;padding-top:.15rem}
+.fb-label small{display:block;font-family:var(--M);font-size:.58rem;color:var(--sky);letter-spacing:.18em;text-transform:uppercase;margin-bottom:.5rem;font-weight:400}
+.fb-body{font-size:.93rem;color:var(--fog);line-height:1.95;font-weight:300}
+.fb-body strong{color:var(--white);font-weight:500}
+
+/* ── INCLUSION PAGE ── */
+.inclusion-hero{padding:6rem 7vw 4rem;background:var(--deep);border-bottom:1px solid var(--border)}
+.incl-page-sec{padding:5rem 7vw;background:var(--ink)}
+.incl-page-inner{max-width:1080px;margin:0 auto}
+.incl-page-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;margin-top:3.5rem}
+.incl-stat-col{display:flex;flex-direction:column;gap:1px;background:var(--border);border:1.5px solid var(--border);border-radius:14px;overflow:hidden}
+.is{background:var(--panel);padding:1.75rem;transition:background .25s}
+.is:hover{background:var(--dim)}
+.is-v{font-family:var(--P);font-size:2.2rem;font-weight:700;color:var(--sky);line-height:1;margin-bottom:.3rem}
+.is-l{font-size:.82rem;color:var(--fog);line-height:1.65;font-weight:300}
+.incl-text-col{}
+.incl-text-col p{font-size:.93rem;color:var(--fog);line-height:1.95;margin-bottom:1.1rem;font-weight:300}
+.incl-text-col p strong{color:var(--white);font-weight:500}
+.incl-principle{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:2rem 2.25rem;margin-top:2rem}
+.incl-principle-t{font-family:var(--P);font-size:1.1rem;font-weight:600;color:var(--white);margin-bottom:.6rem}
+.incl-principle-b{font-size:.86rem;color:var(--fog);line-height:1.85;font-weight:300}
+
+/* ── LEADERSHIP PAGE ── */
+.lead-hero{padding:6rem 7vw 4rem;background:var(--deep);border-bottom:1px solid var(--border)}
+.lead-sec{padding:5rem 7vw;background:var(--ink)}
+.lead-inner{max-width:1080px;margin:0 auto}
+.lead-card{background:var(--panel);border:1px solid var(--border);border-radius:18px;padding:3rem;display:grid;grid-template-columns:1fr 2fr;gap:3rem;align-items:start;margin-top:3rem}
+.lc-left{}
+.lc-avatar{width:80px;height:80px;border-radius:18px;background:linear-gradient(140deg,var(--sky),#2A6FA8);display:flex;align-items:center;justify-content:center;font-family:var(--P);font-size:2.2rem;font-weight:700;color:var(--white);margin-bottom:1.5rem}
+.lc-name{font-family:var(--P);font-size:1.35rem;font-weight:600;color:var(--white);margin-bottom:.25rem}
+.lc-role{font-family:var(--M);font-size:.6rem;color:var(--sky);letter-spacing:.14em;text-transform:uppercase;margin-bottom:1.5rem}
+.lc-tags{display:flex;flex-direction:column;gap:.4rem}
+.lc-tag{font-size:.78rem;color:var(--fog);display:flex;align-items:center;gap:.5rem;font-weight:300}
+.lc-tag::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--sky);flex-shrink:0}
+.lc-right p{font-size:.93rem;color:var(--fog);line-height:1.95;margin-bottom:1rem;font-weight:300}
+.lc-right p strong{color:var(--white);font-weight:500}
+.lc-right blockquote{margin:2rem 0;padding:1.5rem 2rem;border-left:2px solid var(--gold);background:rgba(196,163,90,0.04);border-radius:0 12px 12px 0}
+.lc-right blockquote p{font-family:var(--P);font-size:1.05rem;font-style:italic;color:var(--goldl);margin:0;line-height:1.7}
+.cred-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5px;margin-top:3rem;background:var(--border);border:1.5px solid var(--border);border-radius:14px;overflow:hidden}
+.cred{background:var(--panel);padding:1.75rem}
+.cred-ic{font-size:1.2rem;margin-bottom:.75rem;display:block}
+.cred-t{font-family:var(--P);font-size:.95rem;font-weight:600;color:var(--white);margin-bottom:.3rem}
+.cred-b{font-size:.8rem;color:var(--fog);line-height:1.75;font-weight:300}
+
+/* ── CONTACT PAGE ── */
+.contact-hero{padding:6rem 7vw 4rem;background:var(--deep);border-bottom:1px solid var(--border)}
+.contact-sec{padding:5rem 7vw;background:var(--ink)}
+.contact-inner{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:1fr 1.6fr;gap:5rem;align-items:start}
+.ci-list{}
+.ci-list h3{font-family:var(--P);font-size:1.2rem;font-weight:600;color:var(--white);margin-bottom:1.75rem}
+.ci{padding:.9rem 0;border-bottom:1px solid var(--border)}
+.ci:last-child{border-bottom:none}
+.ci-l{font-family:var(--M);font-size:.58rem;color:var(--sky);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.3rem}
+.ci-v{font-size:.88rem;color:var(--white);font-weight:400}
+.ci-v a{color:var(--sky);text-decoration:none}
+.cf{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:2.75rem}
+.cf-t{font-family:var(--P);font-size:1.3rem;font-weight:600;color:var(--white);margin-bottom:2rem;letter-spacing:-.01em}
+.fl{display:flex;flex-direction:column;gap:.4rem;margin-bottom:1.25rem}
+.fl label{font-family:var(--M);font-size:.6rem;color:var(--fog);letter-spacing:.12em;text-transform:uppercase}
+.fl input,.fl select,.fl textarea{background:var(--deep);border:1px solid var(--border);border-radius:9px;padding:12px 15px;font-size:.88rem;color:var(--white);font-family:var(--B);font-weight:400;outline:none;transition:border-color .2s;width:100%;appearance:none}
+.fl input::placeholder,.fl textarea::placeholder{color:var(--mist)}
+.fl input:focus,.fl select:focus,.fl textarea:focus{border-color:rgba(91,175,212,0.4)}
+.fl select option{background:var(--deep)}
+.fl textarea{height:120px;resize:vertical;line-height:1.6}
+.cf-sub{width:100%;background:var(--sky);color:var(--ink);border:none;border-radius:9px;padding:14px;font-size:.88rem;font-weight:600;cursor:pointer;font-family:var(--B);letter-spacing:.04em;transition:opacity .2s;margin-top:.25rem}
+.cf-sub:hover{opacity:.85}
+.cf-note{font-size:.72rem;color:var(--fog);text-align:center;margin-top:.9rem;font-family:var(--M);letter-spacing:.05em;line-height:1.7}
+
+/* ── FOOTER ── */
+footer{background:var(--deep);border-top:1px solid var(--border);padding:3.5rem 7vw 2.5rem}
+.ft{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:2.5rem;max-width:1080px;margin-left:auto;margin-right:auto}
+.fb-brand{font-family:var(--P);font-size:1.2rem;font-weight:600;color:var(--white);margin-bottom:.5rem;letter-spacing:.01em}
+.fb-desc{font-size:.8rem;color:var(--fog);line-height:1.85;margin-bottom:1rem;max-width:260px;font-weight:300}
+.fb-reg{font-family:var(--M);font-size:.58rem;color:var(--mist);line-height:1.95;letter-spacing:.04em}
+.fc-col h5{font-family:var(--M);font-size:.58rem;color:var(--sky);letter-spacing:.18em;text-transform:uppercase;margin-bottom:1.1rem}
+.fc-col a{display:block;font-size:.8rem;color:var(--fog);text-decoration:none;cursor:pointer;margin-bottom:.5rem;transition:color .2s;background:none;border:none;font-family:var(--B);text-align:left;padding:0;font-weight:300}
+.fc-col a:hover{color:var(--white)}
+.fb-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:2rem;border-top:1px solid var(--border);max-width:1080px;margin:0 auto;font-size:.7rem;color:var(--mist);font-family:var(--M);letter-spacing:.05em;flex-wrap:wrap;gap:.5rem}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .incl-inner,.about-grid,.contact-inner,.lead-card,.incl-page-grid,.ft{grid-template-columns:1fr}
+  .founder-panel{position:static}
+  .pillars-grid{grid-template-columns:1fr}
+  .cred-grid{grid-template-columns:1fr 1fr}
+  .fb-block{grid-template-columns:1fr}
+  .ft{gap:2rem}
+}
+@media(max-width:640px){
+  .nav-links,.nav-cta{display:none}
+  .hbg{display:flex}
+  .pillars-grid,.cred-grid{grid-template-columns:1fr}
+  .hero-h1{font-size:2.8rem}
+  .ft{grid-template-columns:1fr 1fr}
+  .fb-bottom{flex-direction:column;align-items:flex-start;gap:.4rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <button class="nav-brand" onclick="go('home')">
+    <div class="nav-mark">M</div>
+    <div class="nav-wordmark">Marung Sebaka Technologies<small>South Africa</small></div>
+  </button>
+  <div class="nav-links">
+    <a id="n-home" class="on" onclick="go('home')">Home</a>
+    <a id="n-about" onclick="go('about')">About</a>
+    <a id="n-focus" onclick="go('focus')">Our Focus</a>
+    <a id="n-inclusion" onclick="go('inclusion')">Inclusion</a>
+    <a id="n-leadership" onclick="go('leadership')">Leadership</a>
+    <a id="n-contact" onclick="go('contact')">Contact</a>
+  </div>
+  <button class="nav-cta" onclick="go('contact')">Get in Touch</button>
+  <button class="hbg" onclick="toggleMob()"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="mob" id="mob">
+  <a onclick="go('home');toggleMob()">Home</a>
+  <a onclick="go('about');toggleMob()">About</a>
+  <a onclick="go('focus');toggleMob()">Our Focus</a>
+  <a onclick="go('inclusion');toggleMob()">Inclusion</a>
+  <a onclick="go('leadership');toggleMob()">Leadership</a>
+  <a onclick="go('contact');toggleMob()">Contact</a>
+</div>
+
+<!-- ════════════════════════════════════════════ HOME ══ -->
+<div class="pg on" id="pg-home">
+
+  <div class="hero">
+    <div class="hero-noise"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-glow2"></div>
+    <div class="hero-inner">
+      <div class="hero-eyebrow rv">
+        <div class="hero-dot"></div>
+        <span>South African Technology Company</span>
+      </div>
+      <h1 class="hero-h1 rv rv2">
+        Inclusive innovation<br>
+        <em>for everyday life.</em>
+      </h1>
+      <p class="hero-body rv rv3">
+        Marung Sebaka Technologies is a South African technology company focused on <strong>fintech, healthtech and agritech</strong> solutions that expand access, support participation and strengthen socio-economic progress.
+      </p>
+      <div class="hero-acts rv rv4">
+        <button class="btn-pri" onclick="go('about')">About Marung Sebaka Technologies</button>
+        <button class="btn-sec" onclick="go('focus')">Our Focus</button>
+      </div>
+      <div class="hero-rule rv"></div>
+    </div>
+  </div>
+
+  <div class="pillars">
+    <div class="pillars-inner">
+      <div class="rv">
+        <span class="stag">Where We Work</span>
+        <h2 class="sh2">Technology that <em>opens doors.</em></h2>
+        <p class="sbody">We build across sectors where access, participation and dignity matter most — creating practical digital solutions that serve communities often underserved by traditional systems.</p>
+      </div>
+      <div class="pillars-grid rv">
+        <div class="pillar">
+          <span class="pillar-ic">◈</span>
+          <div class="pillar-t">Fintech</div>
+          <p class="pillar-b">Making everyday financial access more practical, more connected and more inclusive — for people and communities across South Africa and the broader region.</p>
+        </div>
+        <div class="pillar">
+          <span class="pillar-ic">◉</span>
+          <div class="pillar-t">Healthtech</div>
+          <p class="pillar-b">Supporting stronger communities by making access to health information, services and digital pathways easier and more equitable across underserved populations.</p>
+        </div>
+        <div class="pillar">
+          <span class="pillar-ic">◌</span>
+          <div class="pillar-t">Agritech</div>
+          <p class="pillar-b">Strengthening resilience, opportunity and local economic activity by improving access, visibility and participation across food and farming ecosystems.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="incl-strip">
+    <div class="incl-inner">
+      <div class="incl-text rv">
+        <span class="stag">Why Inclusion Matters</span>
+        <h2 class="sh2">Technology should not <em>leave people behind.</em></h2>
+        <p class="sbody">Across South Africa and the broader region, too many people remain on the edge of formal systems even while contributing to the economy every day. Inclusive technology can help reduce barriers, widen access and support more equal participation.</p>
+        <div class="incl-quote">
+          <p>"Inclusion is not a slogan. It is a design principle that shapes how we think about people, communities, services and long-term socio-economic change."</p>
+        </div>
+      </div>
+      <div class="incl-pillars rv rv2">
+        <div class="ip">
+          <div class="ip-dot"></div>
+          <div>
+            <div class="ip-t">Expand access</div>
+            <p class="ip-b">Reaching people where they are — on any device, in any location, at any income level — with solutions designed around their realities.</p>
+          </div>
+        </div>
+        <div class="ip">
+          <div class="ip-dot"></div>
+          <div>
+            <div class="ip-t">Support participation</div>
+            <p class="ip-b">Enabling more people to participate meaningfully in economic, health and agricultural systems — not as afterthoughts, but as the primary design consideration.</p>
+          </div>
+        </div>
+        <div class="ip">
+          <div class="ip-dot"></div>
+          <div>
+            <div class="ip-t">Strengthen communities</div>
+            <p class="ip-b">Building with context, responsibility and a clear understanding of the communities and realities around us — for long-term socio-economic progress.</p>
+          </div>
+        </div>
+        <div class="ip">
+          <div class="ip-dot"></div>
+          <div>
+            <div class="ip-t">Preserve dignity</div>
+            <p class="ip-b">Technology built for underserved communities must treat users with dignity — practical, transparent and designed to help people flourish, not extract from them.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-strip">
+    <div class="rv">
+      <span class="stag">Learn More</span>
+      <h2 class="sh2">A serious company.<br><em>A clear purpose.</em></h2>
+      <p class="sbody">Our public presence is intentionally simple. We speak about purpose, direction and impact — because trust begins with clarity, while deeper operational detail belongs in the right private and professional settings.</p>
+      <div class="cta-acts">
+        <button class="btn-pri" onclick="go('about')">About Marung Sebaka Technologies</button>
+        <button class="btn-sec" onclick="go('contact')">Get in Touch</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════ ABOUT ══ -->
+<div class="pg" id="pg-about">
+
+  <div class="about-hero">
+    <div class="rv" style="max-width:700px">
+      <span class="stag">Who We Are</span>
+      <h1 class="sh2" style="font-size:clamp(2.5rem,6vw,4rem)">Marung Sebaka<br><em>Technologies.</em></h1>
+      <p class="sbody">A South African innovation company with a long-term vision for inclusive growth — building across sectors where access, participation and dignity matter most.</p>
+    </div>
+  </div>
+
+  <div class="sec" style="background:var(--ink)">
+    <div class="about-grid" style="max-width:1080px;margin:0 auto">
+      <div class="founder-panel rv">
+        <div class="fp-avatar">M</div>
+        <div class="fp-name">Madichaba Milosevic</div>
+        <div class="fp-role">Founder & Director</div>
+        <div class="fp-tags">
+          <span class="ftag">Cape Town</span>
+          <span class="ftag">South Africa</span>
+          <span class="ftag">100% Black Women-Owned</span>
+          <span class="ftag">B-BBEE Level 1</span>
+        </div>
+        <p class="fp-body">Founder-led. Innovation-driven. Committed to building inclusive technology with context, responsibility and long-term economic relevance.</p>
+        <a href="mailto:madichaba@marungsebaka.co.za" class="fp-email">madichaba@marungsebaka.co.za</a>
+      </div>
+      <div class="about-story rv rv2">
+        <h3>Who We Are</h3>
+        <p>Marung Sebaka Technologies is a South African innovation company with a long-term vision for inclusive growth. We are building across sectors where access, participation and dignity matter most — creating technology-led pathways that can support people who are often underserved by traditional systems.</p>
+        <p>Our public presence is intentionally simple. We speak about purpose, direction and impact because trust begins with clarity, while deeper operational detail belongs in the right private and professional settings.</p>
+        <blockquote>
+          <p>"Technology should not leave people behind. That belief is not a mission statement — it is the founding design principle of everything we build."</p>
+          <cite>— Madichaba Milosevic · Founder & Director</cite>
+        </blockquote>
+        <h3 style="margin-top:2.5rem">Our Name</h3>
+        <p>Marung is a Sesotho word meaning clouds. Sebaka means place. Marung Sebaka — a place in the clouds. It speaks to accessibility, reach and the aspiration that the systems shaping everyday life should be reachable by everyone, from anywhere, on any device.</p>
+        <h3 style="margin-top:2.5rem">Our Commitment</h3>
+        <p>As a South African company, we are committed to building with context and responsibility. We understand the communities we serve — not from a distance, but from lived experience. That context shapes every decision we make, from product design to partnership selection to how we engage with the world.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="values-sec">
+    <div style="max-width:1080px;margin:0 auto">
+      <div class="rv">
+        <span class="stag">What We Stand For</span>
+        <h2 class="sh2">Principles, <em>not slogans.</em></h2>
+      </div>
+      <div class="vals-grid">
+        <div class="val rv">
+          <span class="val-ic">◈</span>
+          <div class="val-t">Inclusion by design</div>
+          <p class="val-b">Inclusive outcomes require inclusive design decisions from the start — not as retrofits or afterthoughts, but as the primary design consideration in every solution we build.</p>
+        </div>
+        <div class="val rv rv2">
+          <span class="val-ic">◉</span>
+          <div class="val-t">Dignity first</div>
+          <p class="val-b">Technology built for underserved communities must treat users with dignity. Practical. Transparent. Designed to help people flourish — not to extract value from vulnerability.</p>
+        </div>
+        <div class="val rv rv3">
+          <span class="val-ic">◌</span>
+          <div class="val-t">Context and responsibility</div>
+          <p class="val-b">Building with a clear understanding of the communities and realities around us. Not assumptions — context. Not theory — lived experience. Not speed — responsibility.</p>
+        </div>
+        <div class="val rv rv4">
+          <span class="val-ic">◫</span>
+          <div class="val-t">Long-term relevance</div>
+          <p class="val-b">We are building for long-term socio-economic progress, not short-term metrics. Sustainable inclusion takes time, trust and a consistent commitment to purpose over convenience.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════ FOCUS ══ -->
+<div class="pg" id="pg-focus">
+
+  <div class="focus-hero">
+    <div class="rv" style="max-width:700px">
+      <span class="stag">Where We Work</span>
+      <h1 class="sh2" style="font-size:clamp(2.5rem,6vw,4rem)">Our <em>focus.</em></h1>
+      <p class="sbody">We build across three sectors where the gap between people and systems is wide — and where practical, inclusive technology can meaningfully change that.</p>
+    </div>
+  </div>
+
+  <div class="focus-sec">
+    <div class="focus-inner">
+      <div class="rv">
+        <span class="stag">Three Sectors</span>
+        <h2 class="sh2">Where <em>access matters most.</em></h2>
+      </div>
+      <div class="focus-blocks rv rv2">
+        <div class="fb-block">
+          <div class="fb-label"><small>01</small>Fintech</div>
+          <p class="fb-body">We believe financial technology can widen participation by making everyday financial access more practical, more connected and more inclusive. The goal is not complexity for its own sake — it is <strong>meaningful access that helps people stay active in the economy.</strong> Across South Africa and the SADC region, millions of people remain on the edge of formal financial systems despite contributing to the economy every day. Inclusive fintech changes that — not by building more products for those who already have access, but by designing specifically for those who do not.</p>
+        </div>
+        <div class="fb-block">
+          <div class="fb-label"><small>02</small>Healthtech</div>
+          <p class="fb-body">We believe health technology can support stronger communities when access to information, services and digital pathways becomes easier and more equitable. <strong>Inclusion in health is part of inclusion in society.</strong> Digital health solutions designed around accessibility — on any device, in any language, at any literacy level — can extend the reach of health systems into communities that traditional infrastructure cannot serve efficiently. The opportunity is significant and the need is real.</p>
+        </div>
+        <div class="fb-block">
+          <div class="fb-label"><small>03</small>Agritech</div>
+          <p class="fb-body">We believe agricultural technology can strengthen resilience, opportunity and local economic activity by improving access, visibility and participation across food and farming ecosystems. <strong>Smallholder farmers, cooperatives and rural communities</strong> are often the least connected to the digital tools that could improve their yields, their market access and their economic stability. Agritech designed for their realities — not for large commercial operations — addresses a genuine and largely unmet need across the African continent.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════ INCLUSION ══ -->
+<div class="pg" id="pg-inclusion">
+
+  <div class="inclusion-hero">
+    <div class="rv" style="max-width:700px">
+      <span class="stag">Why Inclusion Matters</span>
+      <h1 class="sh2" style="font-size:clamp(2.5rem,6vw,4rem)">Inclusion is a <em>design principle.</em></h1>
+      <p class="sbody">Not a slogan. Not a metric. A principle that shapes how we think about people, communities, services and long-term socio-economic change.</p>
+    </div>
+  </div>
+
+  <div class="incl-page-sec">
+    <div class="incl-page-inner">
+      <div class="incl-page-grid rv">
+        <div class="incl-stat-col">
+          <div class="is">
+            <div class="is-v">26M+</div>
+            <p class="is-l">South Africans who are unbanked or underbanked — excluded not by poverty, but by architecture and access barriers in existing systems.</p>
+          </div>
+          <div class="is">
+            <div class="is-v">60%+</div>
+            <p class="is-l">Of underserved recipients in South Africa have no smartphone — meaning digital solutions that require apps or data exclude the majority by default.</p>
+          </div>
+          <div class="is">
+            <div class="is-v">SADC</div>
+            <p class="is-l">A region of 350+ million people where cross-border economic participation is essential to daily life for millions of families and communities.</p>
+          </div>
+          <div class="is">
+            <div class="is-v">SDG 10</div>
+            <p class="is-l">United Nations Sustainable Development Goal 10 — reduced inequalities — including a specific target to reduce remittance costs for cross-border transfers to below 3% by 2030.</p>
+          </div>
+        </div>
+        <div class="incl-text-col">
+          <p>Across South Africa and the broader region, too many people remain on the edge of formal systems — financial, health and agricultural — even while contributing to the economy every day.</p>
+          <p>Inclusive technology can help <strong>reduce barriers, improve convenience, widen access and support more equal participation</strong> in the ecosystems that shape everyday life and long-term opportunity.</p>
+          <p>For Marung Sebaka Technologies, inclusion is not a positioning choice. It is a founding principle — embedded in how we think about design, how we evaluate solutions, how we measure impact and how we build partnerships.</p>
+          <p>The communities we build for are not edge cases or secondary markets. They are the primary design consideration in everything we do.</p>
+          <div class="incl-principle">
+            <div class="incl-principle-t">Inclusive innovation, in practice</div>
+            <p class="incl-principle-b">Inclusive innovation means designing for the person with the basic phone, not just the person with the latest smartphone. It means thinking about the woman in the informal economy, the smallholder farmer, the domestic worker sending money home — and building backward from their realities, not forward from assumptions. That is the Marung Sebaka Technologies approach. That is the only approach that creates durable, meaningful change.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════ LEADERSHIP ══ -->
+<div class="pg" id="pg-leadership">
+
+  <div class="lead-hero">
+    <div class="rv" style="max-width:700px">
+      <span class="stag">Leadership and Vision</span>
+      <h1 class="sh2" style="font-size:clamp(2.5rem,6vw,4rem)">Founder-led.<br><em>Vision-driven.</em></h1>
+      <p class="sbody">Marung Sebaka Technologies is led by a founder-driven vision grounded in innovation, inclusion and long-term economic relevance.</p>
+    </div>
+  </div>
+
+  <div class="lead-sec">
+    <div class="lead-inner">
+      <div class="lead-card rv">
+        <div class="lc-left">
+          <div class="lc-avatar">M</div>
+          <div class="lc-name">Madichaba Milosevic</div>
+          <div class="lc-role">Founder & Director</div>
+          <div class="lc-tags">
+            <div class="lc-tag">Cape Town, South Africa</div>
+            <div class="lc-tag">100% Black Women-Owned</div>
+            <div class="lc-tag">B-BBEE Level 1</div>
+            <div class="lc-tag">Fintech Innovator</div>
+            <div class="lc-tag">Inclusion-focused builder</div>
+          </div>
+        </div>
+        <div class="lc-right">
+          <p>Madichaba Milosevic is the Founder and Director of Marung Sebaka Technologies — a South African technology company building inclusive innovation across fintech, healthtech and agritech.</p>
+          <p>As a self-taught technology builder with deep policy and institutional experience, Madichaba brings a rare combination of lived community understanding, regulatory knowledge and technical capability. Her prior work in the Presidency of South Africa — focused on women's economic empowerment in partnership with UN Women, UNICEF, the Swiss Embassy, the Belgian Embassy and Nordic missions — informs a clear-eyed understanding of what systemic inclusion actually requires.</p>
+          <blockquote>
+            <p>"Technology should not leave people behind. That belief is not a mission statement — it is the founding design principle of everything we build."</p>
+          </blockquote>
+          <p>Marung Sebaka Technologies is incorporated in South Africa, led by a Black woman founder, and committed to building with context, responsibility and long-term economic relevance. The company is 100% Black Women-Owned and holds a B-BBEE Level 1 rating.</p>
+        </div>
+      </div>
+
+      <div class="rv rv2" style="margin-top:3.5rem">
+        <span class="stag">Company Credentials</span>
+        <h2 class="sh2">Built with <em>integrity.</em></h2>
+      </div>
+      <div class="cred-grid rv rv3">
+        <div class="cred">
+          <span class="cred-ic">◈</span>
+          <div class="cred-t">South African company</div>
+          <p class="cred-b">Incorporated and registered in South Africa. Reg. 2026/221199/07. Committed to building for South African and SADC realities.</p>
+        </div>
+        <div class="cred">
+          <span class="cred-ic">◉</span>
+          <div class="cred-t">Innovation-led across three sectors</div>
+          <p class="cred-b">Building practical, inclusive digital solutions across fintech, healthtech and agritech — where access gaps create the greatest opportunity for meaningful impact.</p>
+        </div>
+        <div class="cred">
+          <span class="cred-ic">◌</span>
+          <div class="cred-t">Inclusive and impact-focused</div>
+          <p class="cred-b">Inclusion is a design principle, not a positioning choice. Aligned with UN SDG goals on reduced inequalities and meaningful access for underserved communities.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════ CONTACT ══ -->
+<div class="pg" id="pg-contact">
+
+  <div class="contact-hero">
+    <div class="rv" style="max-width:700px">
+      <span class="stag">Get in Touch</span>
+      <h1 class="sh2" style="font-size:clamp(2.5rem,6vw,4rem)">Strategic conversations <em>welcome.</em></h1>
+      <p class="sbody">For partnership enquiries, strategic conversations or general company information — reach out directly. We welcome engagement aligned with innovation, inclusion and long-term impact.</p>
+    </div>
+  </div>
+
+  <div class="contact-sec">
+    <div class="contact-inner">
+      <div class="ci-list rv">
+        <h3>Direct Contact</h3>
+        <div class="ci"><div class="ci-l">Founder & Director</div><div class="ci-v">Madichaba Milosevic</div></div>
+        <div class="ci"><div class="ci-l">Email</div><div class="ci-v"><a href="mailto:madichaba@marungsebaka.co.za">madichaba@marungsebaka.co.za</a></div></div>
+        <div class="ci"><div class="ci-l">Company</div><div class="ci-v">Marung Sebaka Technologies (Pty) Ltd</div></div>
+        <div class="ci"><div class="ci-l">Registration</div><div class="ci-v">2026/221199/07</div></div>
+        <div class="ci"><div class="ci-l">B-BBEE</div><div class="ci-v">Level 1 · 100% Black Women-Owned</div></div>
+        <div class="ci"><div class="ci-l">Location</div><div class="ci-v">Cape Town, South Africa</div></div>
+        <div class="ci"><div class="ci-l">Enquiries</div><div class="ci-v">All enquiries responded to within 24 hours</div></div>
+      </div>
+      <div class="cf rv rv2">
+        <div class="cf-t">Send a message</div>
+        <div class="fl"><label>Name</label><input type="text" placeholder="Your full name"></div>
+        <div class="fl"><label>Email</label><input type="email" placeholder="your@email.com"></div>
+        <div class="fl"><label>Organisation</label><input type="text" placeholder="Company or organisation"></div>
+        <div class="fl"><label>Nature of enquiry</label>
+          <select>
+            <option value="">Select...</option>
+            <option>Partnership enquiry</option>
+            <option>Strategic conversation</option>
+            <option>Investment enquiry</option>
+            <option>Community or social impact</option>
+            <option>Media or journalist</option>
+            <option>General company information</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="fl"><label>Message</label><textarea placeholder="Tell us about your enquiry..."></textarea></div>
+        <button class="cf-sub" onclick="handleSub()">Send Message</button>
+        <div class="cf-note">All enquiries are read by the founder · Responses within 24 hours<br>NDA available on request for qualified partnership and investment enquiries</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft">
+    <div>
+      <div class="fb-brand">Marung Sebaka Technologies</div>
+      <p class="fb-desc">A South African technology company building inclusive innovation across fintech, healthtech and agritech.</p>
+      <div class="fb-reg">Marung Sebaka Technologies (Pty) Ltd<br>Reg. 2026/221199/07 · Cape Town, South Africa<br>100% Black Women-Owned · B-BBEE Level 1<br>© 2026 · All rights reserved</div>
+    </div>
+    <div class="fc-col">
+      <h5>Company</h5>
+      <a onclick="go('home')">Home</a>
+      <a onclick="go('about')">About</a>
+      <a onclick="go('leadership')">Leadership</a>
+      <a onclick="go('contact')">Contact</a>
+    </div>
+    <div class="fc-col">
+      <h5>Focus</h5>
+      <a onclick="go('focus')">Fintech</a>
+      <a onclick="go('focus')">Healthtech</a>
+      <a onclick="go('focus')">Agritech</a>
+      <a onclick="go('inclusion')">Inclusion</a>
+    </div>
+    <div class="fc-col">
+      <h5>Engage</h5>
+      <a onclick="go('contact')">Partnerships</a>
+      <a onclick="go('contact')">Investment enquiries</a>
+      <a onclick="go('contact')">Media</a>
+      <a href="mailto:madichaba@marungsebaka.co.za">Email directly</a>
+    </div>
+  </div>
+  <div class="fb-bottom">
+    <span>© 2026 Marung Sebaka Technologies (Pty) Ltd · All rights reserved</span>
+    <span>madichaba@marungsebaka.co.za</span>
+  </div>
+</footer>
+
+<script>
+function go(p){
+  document.querySelectorAll('.pg').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('.nav-links a[id]').forEach(x=>x.classList.remove('on'));
+  document.getElementById('pg-'+p).classList.add('on');
+  const n=document.getElementById('n-'+p);
+  if(n)n.classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+  setTimeout(observe,80);
+}
+function toggleMob(){
+  document.getElementById('mob').classList.toggle('open');
+}
+function handleSub(){
+  alert('Thank you — your message has been received.\n\nMadichaba Milosevic will respond personally within 24 hours.\n\nmadichaba@marungsebaka.co.za');
+}
+function observe(){
+  const ob=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){e.target.classList.add('in');ob.unobserve(e.target)}
+    });
+  },{threshold:0.06,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.rv:not(.in)').forEach(el=>ob.observe(el));
+}
+document.addEventListener('DOMContentLoaded',()=>{observe()});
+document.addEventListener('click',e=>{
+  if(!e.target.closest('nav')&&!e.target.closest('#mob'))
+    document.getElementById('mob').classList.remove('open');
+});
+</script>
+</body>
+</html>
