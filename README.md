@@ -1,1 +1,2 @@
 # marung-corporate
+public
