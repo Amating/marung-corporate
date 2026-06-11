@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marung Sebaka — Investor Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #0055A4;
+    --green: #00A86B;
+    --dark: #0A0A0A;
+    --light: #F8F9FA;
+    --grey: #6B7280;
+    --border: #E5E7EB;
+    --card: #111111;
+    --card-border: rgba(255,255,255,0.07);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; background: var(--dark); color: white; }
+  h1,h2,h3,h4,h5 { font-family: 'Syne', sans-serif; }
+
+  /* ── GATE ── */
+  #gate {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 2rem;
+    background: var(--dark);
+    position: relative;
+    overflow: hidden;
+  }
+  #gate::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 50%, rgba(0,168,107,0.08) 0%, transparent 65%);
+  }
+  .gate-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: white;
+    margin-bottom: 3rem;
+    position: relative;
+  }
+  .gate-logo span { color: var(--green); }
+  .gate-box {
+    background: #111;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 1rem;
+    padding: 3rem 2.5rem;
+    max-width: 400px;
+    width: 100%;
+    position: relative;
+  }
+  .gate-box h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: white;
+  }
+  .gate-box p {
+    font-size: 0.875rem;
+    color: #6B7280;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+  .code-inputs {
+    display: flex;
+    gap: 0.6rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+  .code-inputs input {
+    width: 48px;
+    height: 56px;
+    text-align: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 0.5rem;
+    color: white;
+    outline: none;
+    transition: border-color 0.2s;
+    caret-color: var(--green);
+  }
+  .code-inputs input:focus { border-color: var(--green); }
+  .code-inputs input.error { border-color: #EF4444; }
+  .gate-btn {
+    width: 100%;
+    padding: 1rem;
+    background: var(--green);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    margin-bottom: 1rem;
+  }
+  .gate-btn:hover { opacity: 0.85; }
+  .gate-error {
+    font-size: 0.8rem;
+    color: #EF4444;
+    display: none;
+    margin-top: 0.5rem;
+  }
+  .gate-note {
+    font-size: 0.72rem;
+    color: #374151;
+    margin-top: 1.5rem;
+    line-height: 1.6;
+  }
+  .gate-note a { color: #6B7280; }
+
+  /* ── PORTAL ── */
+  #portal { display: none; }
+
+  /* NAV */
+  .p-nav {
+    background: #0A0A0A;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    padding: 1.25rem 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .p-nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; color: white; font-size: 1rem; }
+  .p-nav-logo span { color: var(--green); }
+  .p-nav-links { display: flex; gap: 0.25rem; }
+  .p-nav-links a {
+    color: #6B7280;
+    text-decoration: none;
+    font-size: 0.8rem;
+    padding: 0.4rem 0.85rem;
+    border-radius: 0.4rem;
+    transition: all 0.2s;
+  }
+  .p-nav-links a:hover { color: white; background: rgba(255,255,255,0.05); }
+  .p-nav-badge {
+    font-size: 0.7rem;
+    color: #374151;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 0.3rem 0.75rem;
+    border-radius: 2rem;
+  }
+
+  /* SECTIONS */
+  .p-section { padding: 5rem 2.5rem; max-width: 1020px; margin: 0 auto; }
+  .p-section + .p-section { border-top: 1px solid rgba(255,255,255,0.05); }
+  .s-tag { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--green); margin-bottom: 0.6rem; }
+  .s-title { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; line-height: 1.15; margin-bottom: 1rem; }
+  .s-title em { color: var(--green); font-style: normal; }
+  .s-intro { color: #6B7280; font-size: 1rem; max-width: 640px; line-height: 1.75; margin-bottom: 2.5rem; }
+
+  /* CARDS */
+  .cards-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; }
+  .cards-2 { display: grid; grid-template-columns: repeat(2,1fr); gap: 1rem; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+  }
+  .card-icon { font-size: 1.75rem; margin-bottom: 1rem; }
+  .card h4 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 0.5rem; color: white; }
+  .card p { font-size: 0.875rem; color: #6B7280; line-height: 1.65; }
+  .card-accent { border-left: 2px solid var(--green); }
+
+  /* TABLES */
+  .tbl-wrap { overflow-x: auto; border-radius: 0.75rem; border: 1px solid var(--card-border); margin: 1.5rem 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+  thead { background: rgba(255,255,255,0.04); }
+  th { padding: 0.85rem 1rem; text-align: left; font-family: 'Syne', sans-serif; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.07em; color: #9CA3AF; text-transform: uppercase; }
+  td { padding: 0.85rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); color: #D1D5DB; }
+  tr:last-child td { border-bottom: none; }
+  .hl td { background: rgba(0,168,107,0.07); }
+  .hl td:first-child { color: var(--green); font-weight: 700; }
+  .yes { color: var(--green); font-weight: 700; }
+  .no { color: #EF4444; }
+
+  /* STAT ROW */
+  .stat-row { display: flex; flex-wrap: wrap; gap: 1.5rem; margin: 2rem 0; }
+  .stat-box {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 0.75rem;
+    padding: 1.25rem 1.75rem;
+    flex: 1;
+    min-width: 140px;
+    text-align: center;
+  }
+  .stat-box .num { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; color: white; }
+  .stat-box .lbl { font-size: 0.72rem; color: #6B7280; margin-top: 0.25rem; }
+
+  /* COMPLIANCE GRID */
+  .comp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+  .comp-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+  }
+  .comp-tag { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue); margin-bottom: 0.4rem; }
+  .comp-card h5 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; color: white; margin-bottom: 0.5rem; }
+  .comp-card p { font-size: 0.8rem; color: #6B7280; line-height: 1.65; }
+
+  /* DEMO EMBED */
+  .demo-wrap {
+    background: #f0f7fc;
+    border-radius: 1rem;
+    overflow: hidden;
+    margin: 2rem 0;
+    border: 1px solid var(--card-border);
+  }
+  .demo-wrap iframe {
+    width: 100%;
+    height: 640px;
+    border: none;
+    display: block;
+  }
+
+  /* TIMELINE */
+  .tl { position: relative; padding-left: 1.75rem; margin: 2rem 0; }
+  .tl::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: rgba(255,255,255,0.08); }
+  .tl-item { position: relative; margin-bottom: 2rem; }
+  .tl-dot { position: absolute; left: -1.85rem; top: 0.3rem; width: 10px; height: 10px; border-radius: 50%; background: var(--green); }
+  .tl-date { font-size: 0.72rem; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 0.07em; }
+  .tl-title { font-family: 'Syne', sans-serif; font-weight: 700; color: white; margin: 0.2rem 0; }
+  .tl-detail { font-size: 0.85rem; color: #6B7280; }
+
+  /* CONTACT FOOTER */
+  .p-footer {
+    background: #050505;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    padding: 3rem 2.5rem;
+    text-align: center;
+  }
+  .p-footer h3 { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; }
+  .p-footer h3 em { color: var(--green); font-style: normal; }
+  .p-footer p { color: #6B7280; font-size: 0.9rem; margin-bottom: 1.5rem; }
+  .p-footer a.contact-link {
+    display: inline-block;
+    color: var(--green);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    text-decoration: none;
+    border: 1px solid rgba(0,168,107,0.3);
+    padding: 0.85rem 2rem;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+    margin-bottom: 2rem;
+  }
+  .p-footer a.contact-link:hover { background: rgba(0,168,107,0.1); }
+  .p-footer-meta { font-size: 0.72rem; color: #374151; line-height: 1.8; }
+
+  @media(max-width:768px){
+    .cards-3 { grid-template-columns:1fr; }
+    .cards-2 { grid-template-columns:1fr; }
+    .p-nav-links { display: none; }
+    .p-section { padding: 3rem 1.25rem; }
+    .demo-wrap iframe { height: 780px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── GATE ── -->
+<div id="gate">
+  <div class="gate-logo">Marung <span>Sebaka</span> Technologies</div>
+  <div class="gate-box">
+    <h2>Investor Portal</h2>
+    <p>This portal contains confidential materials shared under NDA. Enter your access code to continue.</p>
+    <div class="code-inputs">
+      <input type="text" maxlength="1" inputmode="numeric" id="c1" onInput="moveNext(this,'c2')" onKeydown="movePrev(event,this,null)">
+      <input type="text" maxlength="1" inputmode="numeric" id="c2" onInput="moveNext(this,'c3')" onKeydown="movePrev(event,this,'c1')">
+      <input type="text" maxlength="1" inputmode="numeric" id="c3" onInput="moveNext(this,'c4')" onKeydown="movePrev(event,this,'c2')">
+      <input type="text" maxlength="1" inputmode="numeric" id="c4" onInput="moveNext(this,'c5')" onKeydown="movePrev(event,this,'c3')">
+      <input type="text" maxlength="1" inputmode="numeric" id="c5" onInput="moveNext(this,'c6')" onKeydown="movePrev(event,this,'c4')">
+      <input type="text" maxlength="1" inputmode="numeric" id="c6" onInput="moveNext(this,null)" onKeydown="movePrev(event,this,'c5')">
+    </div>
+    <button class="gate-btn" onclick="checkCode()">Access Portal</button>
+    <div class="gate-error" id="gate-error">Incorrect code. Please contact botsamaru@marungsebaka.co.za</div>
+    <div class="gate-note">
+      Don't have a code? Reach out to<br>
+      <a href="mailto:botsamaru@marungsebaka.co.za">botsamaru@marungsebaka.co.za</a><br>
+      NDA required before access is granted.
+    </div>
+  </div>
+</div>
+
+<!-- ── PORTAL ── -->
+<div id="portal">
+
+  <nav class="p-nav">
+    <div class="p-nav-logo">Marung <span>Sebaka</span> Technologies</div>
+    <div class="p-nav-links">
+      <a href="#product">Product</a>
+      <a href="#demo">Demo</a>
+      <a href="#market">Market</a>
+      <a href="#comparables">Comparables</a>
+      <a href="#compliance">Compliance</a>
+      <a href="#built">Built</a>
+    </div>
+    <div class="p-nav-badge">Confidential · NDA</div>
+  </nav>
+
+  <!-- HERO -->
+  <div style="padding:5rem 2.5rem 4rem; max-width:1020px; margin:0 auto; border-bottom:1px solid rgba(255,255,255,0.05);">
+    <div class="s-tag">Investor Portal · Confidential</div>
+    <h1 style="font-size:clamp(2.2rem,5vw,4rem);font-weight:800;line-height:1.1;margin-bottom:1.25rem;">
+      South Africa's first<br><span style="color:var(--green);">flat-fee mobile wallet aggregator.</span>
+    </h1>
+    <p style="color:#6B7280;font-size:1.05rem;max-width:600px;line-height:1.75;margin-bottom:2.5rem;">
+      Marung Cloud is a USSD-first payment infrastructure platform enabling 26 million unbanked and underbanked South Africans to receive money from all major banks into a single mobile number — at R10 per month, no transaction fees, no smartphone required.
+    </p>
+    <div style="display:flex;flex-wrap:wrap;gap:1rem;">
+      <div style="background:rgba(0,168,107,0.1);border:1px solid rgba(0,168,107,0.2);padding:0.5rem 1.25rem;border-radius:2rem;font-size:0.8rem;color:var(--green);font-weight:600;">Pre-Seed · 2026</div>
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);padding:0.5rem 1.25rem;border-radius:2rem;font-size:0.8rem;color:#6B7280;">MVP October 2026</div>
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);padding:0.5rem 1.25rem;border-radius:2rem;font-size:0.8rem;color:#6B7280;">AfricaCom November 2026</div>
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);padding:0.5rem 1.25rem;border-radius:2rem;font-size:0.8rem;color:#6B7280;">100% Black Women-Owned · Level 1 B-BBEE</div>
+    </div>
+  </div>
+
+  <!-- PRODUCT -->
+  <div class="p-section" id="product">
+    <div class="s-tag">The Product</div>
+    <h2 class="s-title">One number. Any bank.<em> Zero per transaction.</em></h2>
+    <p class="s-intro">Marung is not a bank. It is a regulated orchestration layer — connecting South Africa's fragmented bank ecosystem to one mobile number at a flat monthly fee.</p>
+
+    <div class="cards-3">
+      <div class="card card-accent">
+        <div class="card-icon">📱</div>
+        <h4>USSD-First</h4>
+        <p>*120*MARUNG# from any basic phone on any SA network. No app. No data. No smartphone. Wallet created in under a minute.</p>
+      </div>
+      <div class="card card-accent">
+        <div class="card-icon">🏦</div>
+        <h4>All Major Banks</h4>
+        <p>FNB, Standard Bank, Capitec, Absa, TymeBank, Nedbank, African Bank — all accepted. Money arrives and stays digital permanently.</p>
+      </div>
+      <div class="card card-accent">
+        <div class="card-icon">💳</div>
+        <h4>Virtual Mastercard</h4>
+        <p>Included at R10/month. Pay at any shop, online or in-store, informal traders and spaza shops via QR code.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🌍</div>
+        <h4>SADC Corridors</h4>
+        <p>Lesotho, Mozambique, Zimbabwe, Eswatini, Zambia — R0 transfer fee. Included in the monthly subscription. No percentage. No hidden charges.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🤝</div>
+        <h4>Stokvel-Ready</h4>
+        <p>Instant digital distribution to all members on distribution day. 11.4 million stokvel participants are a ready-made distribution channel.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🏪</div>
+        <h4>Merchant Payments</h4>
+        <p>QR-based merchant acceptance for spaza shops and informal traders — unlocking the township retail economy digitally.</p>
+      </div>
+    </div>
+
+    <div style="margin-top:3rem;">
+      <div class="s-tag">The Seven-Silo Problem</div>
+      <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.3rem;margin-bottom:0.75rem;color:white;">Every SA bank. A closed ecosystem. <span style="color:var(--green);">Until Marung.</span></h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Bank</th><th>Product</th><th>Recipient receives</th><th>Money stays digital</th><th>Annual cost</th></tr></thead>
+          <tbody>
+            <tr><td>FNB</td><td>eWallet</td><td>OTP — expires 16 hours</td><td class="no">No</td><td>R96–R180</td></tr>
+            <tr><td>Standard Bank</td><td>Instant Money</td><td>Cash voucher at retailer</td><td class="no">No</td><td>R120–R600</td></tr>
+            <tr><td>Absa</td><td>CashSend</td><td>ATM withdrawal code</td><td class="no">No</td><td>R120–R588</td></tr>
+            <tr><td>Nedbank</td><td>Send Money</td><td>ATM or retailer code</td><td class="no">No</td><td>R120</td></tr>
+            <tr><td>Capitec</td><td>Send Cash</td><td>ATM withdrawal · R6/send</td><td class="no">No</td><td>R720</td></tr>
+            <tr><td>Mukuru</td><td>SADC remittance</td><td>Cash collection point</td><td class="no">No</td><td>R1,644</td></tr>
+            <tr class="hl"><td>MARUNG CLOUD</td><td>One wallet · one number</td><td>Permanent digital wallet</td><td class="yes">Yes — forever</td><td>R120 total</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEMO -->
+  <div class="p-section" id="demo" style="background:rgba(255,255,255,0.01);">
+    <div class="s-tag">Interactive Demo</div>
+    <h2 class="s-title">Try it. <em>Right now.</em></h2>
+    <p class="s-intro">This is a working interactive prototype of the Marung Cloud Wallet — built by the founder before any external funding was sought.</p>
+    <div class="demo-wrap">
+      <iframe src="demo.html" title="Marung Cloud Wallet Demo" scrolling="no"></iframe>
+    </div>
+    <p style="font-size:0.75rem;color:#374151;text-align:center;margin-top:0.75rem;">Interactive prototype · For illustration purposes · Actual product subject to regulatory approval</p>
+  </div>
+
+  <!-- MARKET -->
+  <div class="p-section" id="market">
+    <div class="s-tag">Market Opportunity</div>
+    <h2 class="s-title">R43 billion forced back to cash. <em>Every year.</em></h2>
+    <p class="s-intro">South African banks collectively process over R43 billion in cash-send-to-mobile transactions annually. Every recipient is forced back to cash. Marung is the layer that keeps money digital.</p>
+
+    <div class="stat-row">
+      <div class="stat-box"><div class="num">26M+</div><div class="lbl">Addressable SA users</div></div>
+      <div class="stat-box"><div class="num">R43B</div><div class="lbl">Bank cash-send volume</div></div>
+      <div class="stat-box"><div class="num">$11.8B</div><div class="lbl">SA digital wallet market 2025</div></div>
+      <div class="stat-box"><div class="num">11.9%</div><div class="lbl">Market CAGR to 2030</div></div>
+    </div>
+
+    <div style="margin-top:2.5rem;">
+      <div class="s-tag">Target Segments</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Segment</th><th>Size</th><th>Primary Pain</th><th>Marung Solution</th></tr></thead>
+          <tbody>
+            <tr><td>Unbanked SA adults</td><td>7.3 million</td><td>No bank account · forced cash</td><td>USSD · no bank account required</td></tr>
+            <tr><td>SADC foreign nationals</td><td>3 million+</td><td>9%+ remittance fees</td><td>R0 SADC corridors</td></tr>
+            <tr><td>Gig economy workers</td><td>150,000+</td><td>Per-transaction fees eating income</td><td>R0 per transaction forever</td></tr>
+            <tr><td>Students</td><td>2 million+</td><td>Bounce fees · airtime charges</td><td>R10/month flat</td></tr>
+            <tr><td>Stokvel participants</td><td>11.4 million</td><td>Cash risk · distribution fees</td><td>Instant digital distribution</td></tr>
+            <tr class="hl"><td>Total TAM</td><td>30+ million</td><td>Everyone charged to use their money</td><td>R10/month solves it for all</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div style="margin-top:2.5rem;">
+      <div class="s-tag">Revenue Model</div>
+      <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.2rem;margin-bottom:0.75rem;color:white;">Simple. Predictable. <span style="color:var(--green);">Scales with users.</span></h3>
+      <p style="color:#6B7280;font-size:0.9rem;margin-bottom:1.25rem;">Revenue = active wallets × R10/month. Marginal cost per additional user approaches zero. Margin expands at scale.</p>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Active Wallets</th><th>Monthly Revenue</th><th>Milestone</th></tr></thead>
+          <tbody>
+            <tr><td>10,000</td><td>R100,000</td><td>Early pilot</td></tr>
+            <tr><td>50,000</td><td>R500,000</td><td>Q1 2027 · SADC corridors live</td></tr>
+            <tr><td>100,000</td><td>R1,000,000</td><td>Q2 2027 · word of mouth engine</td></tr>
+            <tr class="hl"><td>300,000 — breakeven</td><td>R3,000,000</td><td>Less than 1% of TAM · Q3 2027</td></tr>
+            <tr><td>1,000,000</td><td>R10,000,000</td><td>Pan-African scale</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPARABLES -->
+  <div class="p-section" id="comparables" style="background:rgba(255,255,255,0.01);">
+    <div class="s-tag">African Fintech Comparables</div>
+    <h2 class="s-title">Same model. <em>Proven at scale.</em></h2>
+    <p class="s-intro">The flat-fee, financial inclusion infrastructure model has produced three unicorns across Africa in the last five years. Marung is the South African and SADC variant — with the regulatory, demographic and corridor advantages none of them have.</p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Company</th><th>Market</th><th>Model</th><th>Valuation</th><th>Marung Parallel</th></tr></thead>
+        <tbody>
+          <tr><td>Wave</td><td>Senegal · West Africa</td><td>Flat-fee mobile money · unbanked-first</td><td>$1.7B</td><td>Most direct — identical flat-fee model. Marung adds multi-bank aggregation Wave doesn't have.</td></tr>
+          <tr><td>TymeBank</td><td>South Africa</td><td>Digital bank · unbanked · same market</td><td>$1.5B</td><td>Same country · same demographic · same regulatory environment · unicorn.</td></tr>
+          <tr><td>Moniepoint</td><td>Nigeria</td><td>Financial inclusion infrastructure</td><td>$1B</td><td>Infrastructure-layer approach · not consumer app. Marung is the SA infrastructure layer.</td></tr>
+          <tr class="hl"><td>Marung Cloud</td><td>South Africa · SADC</td><td>Flat-fee · USSD · multi-bank · corridors</td><td>R40M–R60M pre-money</td><td>SADC corridor advantage. Multi-bank aggregation. Structural moat none of the above can replicate.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top:2.5rem;">
+      <div class="s-tag">Why it cannot be copied</div>
+      <div class="cards-2">
+        <div class="card card-accent">
+          <h4>Structural pricing impossibility</h4>
+          <p>FNB cannot adopt flat-fee without destroying R43B in eWallet revenue. Mukuru cannot adopt it without eliminating 9%+ corridor revenue. The incumbents are structurally locked out.</p>
+        </div>
+        <div class="card card-accent">
+          <h4>Multi-bank aggregation moat</h4>
+          <p>No bank will build this — it requires partnering with competitors. No SA fintech has done it. IP protected via GitHub prior art and legal IP framework including Financial Address Platform patent evaluation.</p>
+        </div>
+        <div class="card">
+          <h4>SADC corridor trust</h4>
+          <p>35-country infrastructure partner footprint. December remittance peak engine. Basotho, Mozambican and Zimbabwean community networks built over two years. Takes years to replicate.</p>
+        </div>
+        <div class="card">
+          <h4>Zero CAC acquisition model</h4>
+          <p>Each segment onboards the next. Employer → domestic worker → Lesotho family → community. Self-perpetuating acquisition engine with no advertising spend required.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPLIANCE -->
+  <div class="p-section" id="compliance">
+    <div class="s-tag">Regulatory &amp; Compliance Architecture</div>
+    <h2 class="s-title">Built to be <em>licensed, not tolerated.</em></h2>
+    <p class="s-intro">Marung operates within South Africa's established regulatory framework from day one. The compliance architecture is not an afterthought — it is the foundation the product is built on.</p>
+
+    <div class="comp-grid">
+      <div class="comp-card">
+        <div class="comp-tag">Primary Legislation</div>
+        <h5>National Payment System Act 78/1998</h5>
+        <p>Marung operates as a registered Third-Party Payment Provider (TPPP) under the NPS Act. Registration pathway secured through a sponsor bank — not requiring independent SARB licensing.</p>
+      </div>
+      <div class="comp-card">
+        <div class="comp-tag">Regulator</div>
+        <h5>South African Reserve Bank</h5>
+        <p>Full SARB compliance architecture built into product design. Payments Ecosystem Modernisation Programme is a direct regulatory tailwind for Marung's operating model.</p>
+      </div>
+      <div class="comp-card">
+        <div class="comp-tag">Sponsor Bank Model</div>
+        <h5>BIN Sponsorship &amp; Virtual Card Issuance</h5>
+        <p>Payment infrastructure partner provides BIN sponsorship, virtual Mastercard issuance, KYC infrastructure, and SARB compliance cover. 35-nation SADC footprint included.</p>
+      </div>
+      <div class="comp-card">
+        <div class="comp-tag">Identity &amp; KYC</div>
+        <h5>FICA Compliance</h5>
+        <p>Know Your Customer protocols embedded in the onboarding flow via infrastructure partner. Risk-tiered wallet limits in line with Financial Intelligence Centre Act requirements.</p>
+      </div>
+      <div class="comp-card">
+        <div class="comp-tag">Data Protection</div>
+        <h5>POPIA Compliance</h5>
+        <p>Protection of Personal Information Act compliance built into data architecture. User data sovereignty maintained within South African cloud infrastructure.</p>
+      </div>
+      <div class="comp-card">
+        <div class="comp-tag">Cross-Border</div>
+        <h5>SADC Corridor Compliance</h5>
+        <p>Cross-border transfers structured to comply with exchange control regulations and destination-country central bank requirements across 6 initial corridor markets.</p>
+      </div>
+    </div>
+
+    <div style="margin-top:3rem;background:var(--card);border:1px solid var(--card-border);border-radius:0.75rem;padding:2rem;">
+      <div class="s-tag">Cloud Infrastructure</div>
+      <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.15rem;color:white;margin-bottom:0.75rem;">South African data residency. <span style="color:var(--green);">By design.</span></h3>
+      <p style="color:#6B7280;font-size:0.9rem;line-height:1.75;">All Marung infrastructure is hosted within South African data centre regions — ensuring data sovereignty, POPIA compliance, and sub-10ms latency for USSD interactions. Cloud infrastructure partner selected with Financial Services industry competency and South African operations. AWS af-south-1 (Cape Town) and Azure South Africa North provide the primary and secondary regions.</p>
+    </div>
+  </div>
+
+  <!-- BUILT -->
+  <div class="p-section" id="built" style="background:rgba(255,255,255,0.01);">
+    <div class="s-tag">What Has Been Built</div>
+    <h2 class="s-title">Before asking for <em>a single rand.</em></h2>
+    <p class="s-intro">The founder built the working prototype personally over 14 months before any external funding, before any infrastructure partner agreement, before any engineering team was engaged.</p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Deliverable</th><th>Status</th><th>Significance</th></tr></thead>
+        <tbody>
+          <tr><td>Working prototype</td><td class="yes">✓ Built and tested</td><td>Multi-bank aggregation into one mobile number — demonstrated before funding sought</td></tr>
+          <tr><td>Company incorporated</td><td class="yes">✓ Registered</td><td>CIPC Reg. 2026/221199/07 · 13 March 2026 · Cape Town</td></tr>
+          <tr><td>Trademarks filed</td><td class="yes">✓ Filed</td><td>Classes 36, 38, 42 · CLOUD WALLET and MARUNG SEBAKA TECHNOLOGIES</td></tr>
+          <tr><td>GitHub dated IP commits</td><td class="yes">✓ Protected</td><td>Prior art established April and May 2026 · timestamped before partner engagement</td></tr>
+          <tr><td>IP Disclosure Document v1.1</td><td class="yes">✓ Prepared</td><td>Financial Address Platform patent evaluation · trade secrets register · with legal counsel</td></tr>
+          <tr><td>Technical Advisor</td><td class="yes">✓ Confirmed</td><td>Senior SA engineering experience · Advisory Agreement via legal counsel</td></tr>
+          <tr><td>Legal counsel</td><td style="color:var(--blue);font-weight:600;">In progress</td><td>7 workstreams prepared · commencing on seed funding close</td></tr>
+          <tr><td>Payment infrastructure partner</td><td style="color:var(--blue);font-weight:600;">Identified</td><td>BIN · virtual cards · SARB · KYC · SADC · 35 African nations · discussions underway</td></tr>
+          <tr><td>Cloud infrastructure</td><td style="color:var(--blue);font-weight:600;">Identified</td><td>Financial services competency · SA data residency · engagement on seed close</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top:3rem;">
+      <div class="s-tag">Launch Sequence</div>
+      <div class="tl">
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">Mar 2026</div><div class="tl-title">Company incorporated</div><div class="tl-detail">CIPC Reg. 2026/221199/07 · Cape Town</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">Apr–May 2026</div><div class="tl-title">Prototype built and tested</div><div class="tl-detail">Multi-bank aggregation demonstrated · GitHub prior art established</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">Jun 2026</div><div class="tl-title">Seed round closing</div><div class="tl-detail">Infrastructure partners engaged · legal workstreams activate</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">Jul–Sep 2026</div><div class="tl-title">Production build</div><div class="tl-detail">Engineering team onboarded · cloud environment live · payment integration</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">Oct 2026</div><div class="tl-title">MVP Launch</div><div class="tl-detail">Internal pilot · family and friends · full wallet functional</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">Nov 2026</div><div class="tl-title">Public Launch — AfricaCom CTICC</div><div class="tl-detail">Africa Tech Festival · Cape Town · 800+ fintech delegates</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">20 Nov 2026</div><div class="tl-title">Lesotho Corridor Live</div><div class="tl-detail">First SADC corridor · R0 fee · ahead of December remittance peak</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">Q3 2027</div><div class="tl-title">Breakeven</div><div class="tl-detail">300,000 users · R3M/month · less than 1% of TAM · self-funding</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACT FOOTER -->
+  <div class="p-footer">
+    <h3>Ready to <em>talk?</em></h3>
+    <p>Every enquiry is read by the founder. NDA available immediately on request.</p>
+    <a class="contact-link" href="mailto:botsamaru@marungsebaka.co.za">botsamaru@marungsebaka.co.za</a>
+    <div class="p-footer-meta">
+      Marung Sebaka Technologies (Pty) Ltd · Reg. 2026/221199/07 · Cape Town, South Africa<br>
+      100% Black Women-Owned · Level 1 B-BBEE · © 2026 All rights reserved<br>
+      This document is confidential and subject to NDA · Not for distribution
+    </div>
+  </div>
+
+</div><!-- /portal -->
+
+<script>
+  function moveNext(el, nextId) {
+    if (el.value.length === 1 && nextId) {
+      document.getElementById(nextId).focus();
+    }
+  }
+  function movePrev(e, el, prevId) {
+    if (e.key === 'Backspace' && el.value === '' && prevId) {
+      document.getElementById(prevId).focus();
+    }
+  }
+  function checkCode() {
+    const code = ['c1','c2','c3','c4','c5','c6'].map(id => document.getElementById(id).value).join('');
+    if (code === '627864') {
+      document.getElementById('gate').style.display = 'none';
+      document.getElementById('portal').style.display = 'block';
+      window.scrollTo(0,0);
+    } else {
+      ['c1','c2','c3','c4','c5','c6'].forEach(id => {
+        document.getElementById(id).classList.add('error');
+        document.getElementById(id).value = '';
+      });
+      document.getElementById('gate-error').style.display = 'block';
+      document.getElementById('c1').focus();
+    }
+  }
+  // Allow Enter key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') checkCode();
+  });
+</script>
+</body>
+</html>
