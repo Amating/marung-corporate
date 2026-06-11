@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marung Cloud Wallet — Live Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #00A86B;
+    --green-light: #00D48A;
+    --blue: #0055A4;
+    --dark: #0A0A0A;
+    --card: #141414;
+    --grey: #6B7280;
+    --text: #D1D5DB;
+    --border: rgba(255,255,255,0.08);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family:'Inter',sans-serif;
+    background:var(--dark);
+    color:white;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-start;
+    padding:3rem 1.5rem 4rem;
+  }
+  h1,h2,h3,h4 { font-family:'Syne',sans-serif; }
+
+  /* INTRO */
+  .intro {
+    text-align:center;
+    max-width:600px;
+    margin-bottom:3rem;
+  }
+  .intro-tag {
+    font-size:0.68rem;
+    font-weight:700;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--green);
+    margin-bottom:1rem;
+    display:block;
+  }
+  .intro h1 {
+    font-size:clamp(1.8rem,4vw,3rem);
+    font-weight:800;
+    line-height:1.1;
+    margin-bottom:1rem;
+  }
+  .intro h1 em { color:var(--green); font-style:normal; }
+  .intro p { color:var(--grey); font-size:0.95rem; line-height:1.75; }
+
+  /* FLOW TABS */
+  .tabs {
+    display:flex;
+    gap:0.5rem;
+    margin-bottom:2.5rem;
+    background:rgba(255,255,255,0.04);
+    border:1px solid var(--border);
+    border-radius:3rem;
+    padding:0.35rem;
+  }
+  .tab {
+    padding:0.6rem 1.5rem;
+    border-radius:2rem;
+    font-family:'Syne',sans-serif;
+    font-size:0.82rem;
+    font-weight:700;
+    cursor:pointer;
+    transition:all 0.25s;
+    color:var(--grey);
+    border:none;
+    background:none;
+  }
+  .tab.active {
+    background:var(--green);
+    color:white;
+  }
+  .tab:hover:not(.active) { color:white; }
+
+  /* PHONE SHELL */
+  .scene {
+    display:flex;
+    gap:3rem;
+    align-items:flex-start;
+    max-width:900px;
+    width:100%;
+  }
+  .phone-wrap {
+    flex-shrink:0;
+    position:relative;
+  }
+  .phone {
+    width:280px;
+    background:#0D0D0D;
+    border-radius:2.5rem;
+    border:2px solid rgba(255,255,255,0.12);
+    overflow:hidden;
+    box-shadow:
+      0 0 0 6px rgba(255,255,255,0.03),
+      0 40px 80px rgba(0,0,0,0.8),
+      0 0 60px rgba(0,168,107,0.08);
+    position:relative;
+  }
+  .phone-notch {
+    height:28px;
+    background:#0D0D0D;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    z-index:2;
+  }
+  .phone-notch::after {
+    content:'';
+    width:80px;
+    height:5px;
+    background:rgba(255,255,255,0.15);
+    border-radius:3px;
+  }
+  .phone-screen {
+    height:540px;
+    overflow:hidden;
+    position:relative;
+  }
+
+  /* SCREENS */
+  .screen {
+    position:absolute;
+    inset:0;
+    opacity:0;
+    transform:translateY(20px);
+    transition:all 0.4s cubic-bezier(0.4,0,0.2,1);
+    pointer-events:none;
+    overflow-y:auto;
+  }
+  .screen.active {
+    opacity:1;
+    transform:translateY(0);
+    pointer-events:all;
+  }
+  .screen.exit {
+    opacity:0;
+    transform:translateY(-20px);
+  }
+
+  /* WALLET HOME SCREEN */
+  .wallet-header {
+    background:linear-gradient(160deg,#001a0d,#003320);
+    padding:1.5rem 1.25rem 1.25rem;
+  }
+  .wallet-greeting {
+    font-size:0.65rem;
+    color:rgba(255,255,255,0.45);
+    letter-spacing:0.05em;
+    margin-bottom:0.2rem;
+  }
+  .wallet-name {
+    font-family:'Syne',sans-serif;
+    font-size:0.95rem;
+    font-weight:700;
+    color:white;
+    margin-bottom:1rem;
+  }
+  .wallet-balance-label {
+    font-size:0.6rem;
+    color:rgba(255,255,255,0.4);
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    margin-bottom:0.2rem;
+  }
+  .wallet-balance {
+    font-family:'Syne',sans-serif;
+    font-size:2rem;
+    font-weight:800;
+    color:white;
+    line-height:1;
+    margin-bottom:0.4rem;
+  }
+  .wallet-number {
+    font-size:0.65rem;
+    color:rgba(0,212,138,0.7);
+    font-family:monospace;
+  }
+  .wallet-actions {
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:0.5rem;
+    padding:0.85rem 1.25rem;
+    background:#111;
+    border-bottom:1px solid rgba(255,255,255,0.06);
+  }
+  .w-action {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:0.35rem;
+    cursor:pointer;
+    padding:0.6rem 0.25rem;
+    border-radius:0.75rem;
+    transition:background 0.2s;
+  }
+  .w-action:hover { background:rgba(255,255,255,0.05); }
+  .w-action-icon {
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1rem;
+  }
+  .w-action-icon.green { background:rgba(0,168,107,0.2); }
+  .w-action-icon.blue { background:rgba(0,85,164,0.2); }
+  .w-action-icon.orange { background:rgba(234,88,12,0.2); }
+  .w-action-icon.purple { background:rgba(124,58,237,0.2); }
+  .w-action span {
+    font-size:0.55rem;
+    color:rgba(255,255,255,0.5);
+    text-align:center;
+    line-height:1.3;
+  }
+  .wallet-txlist { padding:0.85rem 1.25rem; }
+  .tx-label {
+    font-size:0.6rem;
+    color:rgba(255,255,255,0.3);
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    margin-bottom:0.6rem;
+  }
+  .tx-item {
+    display:flex;
+    align-items:center;
+    gap:0.75rem;
+    padding:0.65rem 0;
+    border-bottom:1px solid rgba(255,255,255,0.04);
+  }
+  .tx-icon {
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:0.85rem;
+    flex-shrink:0;
+  }
+  .tx-icon.in { background:rgba(0,168,107,0.15); }
+  .tx-icon.out { background:rgba(239,68,68,0.1); }
+  .tx-info { flex:1; }
+  .tx-name { font-size:0.72rem; font-weight:600; color:white; }
+  .tx-sub { font-size:0.6rem; color:rgba(255,255,255,0.35); margin-top:1px; }
+  .tx-amount { font-family:'Syne',sans-serif; font-size:0.78rem; font-weight:700; }
+  .tx-amount.in { color:var(--green-light); }
+  .tx-amount.out { color:#F87171; }
+
+  /* NOTIFICATION POPUP */
+  .notif {
+    position:absolute;
+    top:8px;
+    left:8px;
+    right:8px;
+    background:rgba(20,20,20,0.97);
+    border:1px solid rgba(0,168,107,0.3);
+    border-radius:0.75rem;
+    padding:0.75rem 1rem;
+    display:flex;
+    align-items:center;
+    gap:0.75rem;
+    z-index:10;
+    opacity:0;
+    transform:translateY(-10px);
+    transition:all 0.4s;
+    backdrop-filter:blur(10px);
+  }
+  .notif.show { opacity:1; transform:translateY(0); }
+  .notif-icon { font-size:1.25rem; flex-shrink:0; }
+  .notif-text { flex:1; }
+  .notif-title { font-family:'Syne',sans-serif; font-size:0.72rem; font-weight:700; color:white; }
+  .notif-body { font-size:0.62rem; color:rgba(255,255,255,0.5); margin-top:1px; }
+  .notif-amount { font-family:'Syne',sans-serif; font-size:0.85rem; font-weight:800; color:var(--green-light); }
+
+  /* RECEIVE SCREEN */
+  .receive-screen {
+    background:#0A0A0A;
+    min-height:100%;
+    padding:1.25rem;
+  }
+  .screen-back {
+    font-size:0.7rem;
+    color:var(--green);
+    margin-bottom:1rem;
+    display:flex;
+    align-items:center;
+    gap:0.3rem;
+    cursor:pointer;
+  }
+  .receive-header {
+    text-align:center;
+    margin-bottom:1.5rem;
+  }
+  .receive-header h3 {
+    font-family:'Syne',sans-serif;
+    font-size:1rem;
+    font-weight:700;
+    margin-bottom:0.25rem;
+  }
+  .receive-header p {
+    font-size:0.65rem;
+    color:rgba(255,255,255,0.4);
+    line-height:1.5;
+  }
+  .receive-number {
+    background:linear-gradient(135deg,rgba(0,168,107,0.1),rgba(0,85,164,0.1));
+    border:1px solid rgba(0,168,107,0.2);
+    border-radius:1rem;
+    padding:1rem;
+    text-align:center;
+    margin-bottom:1rem;
+  }
+  .receive-number .label { font-size:0.58rem; color:rgba(255,255,255,0.4); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.4rem; }
+  .receive-number .number { font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:800; color:white; letter-spacing:0.05em; }
+  .receive-number .sub { font-size:0.6rem; color:var(--green); margin-top:0.3rem; }
+  .bank-list { display:flex; flex-direction:column; gap:0.5rem; }
+  .bank-item {
+    display:flex;
+    align-items:center;
+    gap:0.75rem;
+    padding:0.7rem 0.85rem;
+    background:rgba(255,255,255,0.04);
+    border-radius:0.6rem;
+    border:1px solid rgba(255,255,255,0.06);
+  }
+  .bank-logo {
+    width:28px;
+    height:28px;
+    border-radius:6px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:0.7rem;
+    font-weight:800;
+    font-family:'Syne',sans-serif;
+    flex-shrink:0;
+  }
+  .bank-name { font-size:0.7rem; font-weight:600; color:white; }
+  .bank-tag { font-size:0.58rem; color:rgba(255,255,255,0.35); }
+  .bank-check { margin-left:auto; font-size:0.8rem; color:var(--green); }
+
+  /* PAY SCREEN */
+  .pay-screen {
+    background:#0A0A0A;
+    min-height:100%;
+    padding:1.25rem;
+  }
+  .qr-area {
+    background:white;
+    border-radius:1rem;
+    padding:1rem;
+    margin:1rem 0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:0.5rem;
+  }
+  .qr-grid {
+    display:grid;
+    grid-template-columns:repeat(9,1fr);
+    gap:2px;
+    width:120px;
+    height:120px;
+  }
+  .qr-cell { border-radius:1px; }
+  .merchant-tag {
+    font-family:'Syne',sans-serif;
+    font-size:0.7rem;
+    font-weight:700;
+    color:#0A0A0A;
+  }
+  .merchant-sub {
+    font-size:0.58rem;
+    color:#6B7280;
+  }
+  .pay-confirm {
+    background:linear-gradient(135deg,rgba(0,168,107,0.1),rgba(0,85,164,0.05));
+    border:1px solid rgba(0,168,107,0.2);
+    border-radius:0.85rem;
+    padding:1rem;
+    display:flex;
+    flex-direction:column;
+    gap:0.5rem;
+  }
+  .pay-row {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .pay-row-label { font-size:0.62rem; color:rgba(255,255,255,0.4); }
+  .pay-row-value { font-size:0.72rem; font-weight:600; color:white; }
+  .pay-row-value.big { font-family:'Syne',sans-serif; font-size:1rem; font-weight:800; color:var(--green-light); }
+  .btn-pay {
+    width:100%;
+    padding:0.85rem;
+    background:var(--green);
+    color:white;
+    border:none;
+    border-radius:0.75rem;
+    font-family:'Syne',sans-serif;
+    font-weight:700;
+    font-size:0.85rem;
+    cursor:pointer;
+    margin-top:0.75rem;
+    transition:all 0.2s;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:0.5rem;
+  }
+  .btn-pay:hover { opacity:0.9; transform:scale(0.99); }
+  .btn-pay:active { transform:scale(0.97); }
+
+  /* SADC SCREEN */
+  .sadc-screen {
+    background:#0A0A0A;
+    min-height:100%;
+    padding:1.25rem;
+  }
+  .corridor-item {
+    display:flex;
+    align-items:center;
+    gap:0.75rem;
+    padding:0.7rem 0.85rem;
+    background:rgba(255,255,255,0.04);
+    border-radius:0.6rem;
+    border:1px solid rgba(255,255,255,0.06);
+    margin-bottom:0.5rem;
+    cursor:pointer;
+    transition:all 0.2s;
+  }
+  .corridor-item:hover { border-color:rgba(0,168,107,0.3); background:rgba(0,168,107,0.05); }
+  .corridor-item.selected { border-color:var(--green); background:rgba(0,168,107,0.08); }
+  .corridor-flag { font-size:1.25rem; }
+  .corridor-info { flex:1; }
+  .corridor-country { font-size:0.75rem; font-weight:600; color:white; }
+  .corridor-fee { font-size:0.62rem; color:var(--green); margin-top:1px; }
+  .corridor-check { font-size:0.85rem; color:var(--green); opacity:0; transition:opacity 0.2s; }
+  .corridor-item.selected .corridor-check { opacity:1; }
+  .amount-input {
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:0.75rem;
+    padding:0.85rem 1rem;
+    margin:0.75rem 0;
+    display:flex;
+    align-items:center;
+    gap:0.5rem;
+  }
+  .amount-input span { font-size:0.7rem; color:rgba(255,255,255,0.4); }
+  .amount-input input {
+    background:none;
+    border:none;
+    outline:none;
+    color:white;
+    font-family:'Syne',sans-serif;
+    font-size:1.1rem;
+    font-weight:700;
+    width:100%;
+  }
+  .sadc-zero-badge {
+    background:rgba(0,168,107,0.1);
+    border:1px solid rgba(0,168,107,0.25);
+    border-radius:2rem;
+    padding:0.5rem 1rem;
+    text-align:center;
+    margin-bottom:0.75rem;
+  }
+  .sadc-zero-badge span { font-size:0.72rem; color:var(--green); font-weight:600; }
+
+  /* SUCCESS */
+  .success-overlay {
+    position:absolute;
+    inset:0;
+    background:rgba(0,10,5,0.97);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    z-index:20;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 0.4s;
+    padding:2rem;
+    text-align:center;
+  }
+  .success-overlay.show { opacity:1; pointer-events:all; }
+  .success-ring {
+    width:72px;
+    height:72px;
+    border-radius:50%;
+    background:rgba(0,168,107,0.15);
+    border:2px solid var(--green);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:2rem;
+    margin-bottom:1.25rem;
+    animation:pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { box-shadow:0 0 0 0 rgba(0,168,107,0.3); }
+    50% { box-shadow:0 0 0 12px rgba(0,168,107,0); }
+  }
+  .success-title { font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:800; margin-bottom:0.5rem; }
+  .success-amount { font-family:'Syne',sans-serif; font-size:1.75rem; font-weight:800; color:var(--green-light); margin-bottom:0.5rem; }
+  .success-sub { font-size:0.7rem; color:rgba(255,255,255,0.4); line-height:1.6; margin-bottom:1.5rem; }
+  .btn-done {
+    background:var(--green);
+    color:white;
+    border:none;
+    border-radius:0.75rem;
+    padding:0.75rem 2rem;
+    font-family:'Syne',sans-serif;
+    font-weight:700;
+    font-size:0.85rem;
+    cursor:pointer;
+  }
+
+  /* EXPLANATION PANEL */
+  .explain {
+    flex:1;
+    min-width:0;
+  }
+  .explain-steps { display:flex; flex-direction:column; gap:1rem; }
+  .explain-step {
+    display:flex;
+    gap:1rem;
+    align-items:flex-start;
+    padding:1rem 1.25rem;
+    background:rgba(255,255,255,0.03);
+    border:1px solid rgba(255,255,255,0.06);
+    border-radius:0.75rem;
+    cursor:pointer;
+    transition:all 0.2s;
+    position:relative;
+    overflow:hidden;
+  }
+  .explain-step::before {
+    content:'';
+    position:absolute;
+    left:0;
+    top:0;
+    bottom:0;
+    width:2px;
+    background:transparent;
+    transition:background 0.2s;
+  }
+  .explain-step.active {
+    background:rgba(0,168,107,0.06);
+    border-color:rgba(0,168,107,0.2);
+  }
+  .explain-step.active::before { background:var(--green); }
+  .step-num {
+    width:28px;
+    height:28px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.06);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Syne',sans-serif;
+    font-size:0.72rem;
+    font-weight:700;
+    color:rgba(255,255,255,0.4);
+    flex-shrink:0;
+    transition:all 0.2s;
+  }
+  .explain-step.active .step-num {
+    background:var(--green);
+    color:white;
+  }
+  .step-content h4 { font-family:'Syne',sans-serif; font-size:0.9rem; font-weight:700; margin-bottom:0.25rem; }
+  .step-content p { font-size:0.8rem; color:var(--grey); line-height:1.65; }
+  .step-content .highlight { color:var(--green); font-weight:600; }
+
+  /* KEY FACT */
+  .key-fact {
+    margin-top:1.5rem;
+    background:linear-gradient(135deg,rgba(0,85,164,0.15),rgba(0,168,107,0.08));
+    border:1px solid rgba(0,168,107,0.15);
+    border-radius:0.75rem;
+    padding:1.25rem;
+  }
+  .key-fact-label { font-size:0.65rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--green); margin-bottom:0.4rem; }
+  .key-fact p { font-size:0.85rem; color:var(--text); line-height:1.7; }
+  .key-fact strong { color:white; }
+
+  @media(max-width:700px) {
+    .scene { flex-direction:column; align-items:center; }
+    .explain { width:100%; max-width:340px; }
+    .tabs { flex-wrap:wrap; justify-content:center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="intro">
+  <span class="intro-tag">Interactive Demo · Marung Cloud Wallet</span>
+  <h1>See it work.<br><em>Right now.</em></h1>
+  <p>Three journeys. Tap through each one. This is what 26 million South Africans have never had.</p>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchFlow('receive',this)">💸 Receive Money</button>
+  <button class="tab" onclick="switchFlow('pay',this)">💳 Pay Anywhere</button>
+  <button class="tab" onclick="switchFlow('sadc',this)">🌍 Send Home — R0</button>
+</div>
+
+<div class="scene">
+
+  <!-- PHONE -->
+  <div class="phone-wrap">
+    <div class="phone">
+      <div class="phone-notch"></div>
+      <div class="phone-screen" id="phoneScreen">
+
+        <!-- HOME -->
+        <div class="screen active" id="screen-home">
+          <div class="wallet-header">
+            <div class="wallet-greeting">Good morning</div>
+            <div class="wallet-name">Nomsa Dlamini</div>
+            <div class="wallet-balance-label">Available balance</div>
+            <div class="wallet-balance" id="homeBalance">R 1,240.00</div>
+            <div class="wallet-number">+27 76 234 5678 · Marung Cloud</div>
+          </div>
+          <div class="wallet-actions">
+            <div class="w-action" onclick="showReceive()">
+              <div class="w-action-icon green">📥</div>
+              <span>Receive</span>
+            </div>
+            <div class="w-action" onclick="showPay()">
+              <div class="w-action-icon blue">💳</div>
+              <span>Pay</span>
+            </div>
+            <div class="w-action" onclick="showSADC()">
+              <div class="w-action-icon orange">🌍</div>
+              <span>Send</span>
+            </div>
+            <div class="w-action">
+              <div class="w-action-icon purple">📊</div>
+              <span>History</span>
+            </div>
+          </div>
+          <div class="wallet-txlist">
+            <div class="tx-label">Recent</div>
+            <div class="tx-item">
+              <div class="tx-icon in">📥</div>
+              <div class="tx-info">
+                <div class="tx-name">From FNB — Thandi M.</div>
+                <div class="tx-sub">Yesterday · Cash Send</div>
+              </div>
+              <div class="tx-amount in">+R500</div>
+            </div>
+            <div class="tx-item">
+              <div class="tx-icon out">🛒</div>
+              <div class="tx-info">
+                <div class="tx-name">Shoprite Khayelitsha</div>
+                <div class="tx-sub">2 days ago · Mastercard</div>
+              </div>
+              <div class="tx-amount out">-R180</div>
+            </div>
+            <div class="tx-item">
+              <div class="tx-icon out">🌍</div>
+              <div class="tx-info">
+                <div class="tx-name">Maseru · Lesotho</div>
+                <div class="tx-sub">Last week · R0 fee</div>
+              </div>
+              <div class="tx-amount out">-R400</div>
+            </div>
+          </div>
+          <!-- NOTIFICATION -->
+          <div class="notif" id="notif">
+            <div class="notif-icon">🏦</div>
+            <div class="notif-text">
+              <div class="notif-title">Money received</div>
+              <div class="notif-body">Standard Bank · Sarah K.</div>
+            </div>
+            <div class="notif-amount">+R750</div>
+          </div>
+        </div>
+
+        <!-- RECEIVE SCREEN -->
+        <div class="screen" id="screen-receive">
+          <div class="receive-screen">
+            <div class="screen-back" onclick="goHome()">← Back</div>
+            <div class="receive-header">
+              <h3>Receive Money</h3>
+              <p>Share your number.<br>Anyone with a SA bank account can send to you.</p>
+            </div>
+            <div class="receive-number">
+              <div class="label">Your Marung number</div>
+              <div class="number">+27 76 234 5678</div>
+              <div class="sub">✓ Accepts all SA banks</div>
+            </div>
+            <div style="font-size:0.62rem;color:rgba(255,255,255,0.35);margin-bottom:0.6rem;text-transform:uppercase;letter-spacing:0.08em;">Accepted from</div>
+            <div class="bank-list">
+              <div class="bank-item">
+                <div class="bank-logo" style="background:#007A33;color:white;">FNB</div>
+                <div><div class="bank-name">FNB</div><div class="bank-tag">eWallet · Cash Send</div></div>
+                <div class="bank-check">✓</div>
+              </div>
+              <div class="bank-item">
+                <div class="bank-logo" style="background:#004B87;color:white;">STD</div>
+                <div><div class="bank-name">Standard Bank</div><div class="bank-tag">Instant Money</div></div>
+                <div class="bank-check">✓</div>
+              </div>
+              <div class="bank-item">
+                <div class="bank-logo" style="background:#B22222;color:white;">CAP</div>
+                <div><div class="bank-name">Capitec</div><div class="bank-tag">Send Cash · R0 fee</div></div>
+                <div class="bank-check">✓</div>
+              </div>
+              <div class="bank-item">
+                <div class="bank-logo" style="background:#E31837;color:white;">ABS</div>
+                <div><div class="bank-name">Absa</div><div class="bank-tag">CashSend</div></div>
+                <div class="bank-check">✓</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAY SCREEN -->
+        <div class="screen" id="screen-pay">
+          <div class="pay-screen">
+            <div class="screen-back" onclick="goHome()">← Back</div>
+            <div style="text-align:center;margin-bottom:0.5rem;">
+              <h3 style="font-size:1rem;margin-bottom:0.2rem;">Pay with Mastercard</h3>
+              <p style="font-size:0.62rem;color:rgba(255,255,255,0.4);">Scan QR or tap card at any merchant</p>
+            </div>
+            <div class="qr-area" id="qrArea">
+              <div id="qrCode" style="width:110px;height:110px;"></div>
+              <div class="merchant-tag">Mama Afrika Spaza</div>
+              <div class="merchant-sub">Khayelitsha · Cape Town</div>
+            </div>
+            <div class="pay-confirm">
+              <div class="pay-row">
+                <div class="pay-row-label">Merchant</div>
+                <div class="pay-row-value">Mama Afrika Spaza</div>
+              </div>
+              <div class="pay-row">
+                <div class="pay-row-label">Amount</div>
+                <div class="pay-row-value big">R 85.00</div>
+              </div>
+              <div class="pay-row">
+                <div class="pay-row-label">Transaction fee</div>
+                <div class="pay-row-value" style="color:var(--green-light);">R 0.00</div>
+              </div>
+              <div class="pay-row">
+                <div class="pay-row-label">Card</div>
+                <div class="pay-row-value">•••• •••• •••• 4821</div>
+              </div>
+            </div>
+            <button class="btn-pay" onclick="confirmPay()">
+              <span>✓</span> Confirm Payment
+            </button>
+          </div>
+          <div class="success-overlay" id="paySuccess">
+            <div class="success-ring">✓</div>
+            <div class="success-title">Payment Complete</div>
+            <div class="success-amount">R 85.00</div>
+            <div class="success-sub">Mama Afrika Spaza<br>No transaction fee<br>New balance: R 1,655.00</div>
+            <button class="btn-done" onclick="closeSuccess('paySuccess')">Done</button>
+          </div>
+        </div>
+
+        <!-- SADC SCREEN -->
+        <div class="screen" id="screen-sadc">
+          <div class="sadc-screen">
+            <div class="screen-back" onclick="goHome()">← Back</div>
+            <h3 style="font-size:1rem;margin-bottom:0.25rem;">Send Money Home</h3>
+            <p style="font-size:0.62rem;color:rgba(255,255,255,0.4);margin-bottom:0.85rem;">SADC corridors · R0 transfer fee · always</p>
+            <div class="sadc-zero-badge">
+              <span>🎉 Zero corridor fee — included in your R10/month</span>
+            </div>
+            <div class="corridor-item selected" id="cor-ls" onclick="selectCorridor('ls')">
+              <div class="corridor-flag">🇱🇸</div>
+              <div class="corridor-info">
+                <div class="corridor-country">Lesotho</div>
+                <div class="corridor-fee">R0 fee · arrives in minutes</div>
+              </div>
+              <div class="corridor-check">✓</div>
+            </div>
+            <div class="corridor-item" id="cor-mz" onclick="selectCorridor('mz')">
+              <div class="corridor-flag">🇲🇿</div>
+              <div class="corridor-info">
+                <div class="corridor-country">Mozambique</div>
+                <div class="corridor-fee">R0 fee · arrives same day</div>
+              </div>
+              <div class="corridor-check">✓</div>
+            </div>
+            <div class="corridor-item" id="cor-zw" onclick="selectCorridor('zw')">
+              <div class="corridor-flag">🇿🇼</div>
+              <div class="corridor-info">
+                <div class="corridor-country">Zimbabwe</div>
+                <div class="corridor-fee">R0 fee · arrives same day</div>
+              </div>
+              <div class="corridor-check">✓</div>
+            </div>
+            <div class="amount-input">
+              <span>R</span>
+              <input type="number" value="500" id="sadcAmount" min="10" max="5000">
+            </div>
+            <button class="btn-pay" onclick="confirmSADC()">Send R<span id="sendAmt">500</span> — R0 Fee</button>
+          </div>
+          <div class="success-overlay" id="sadcSuccess">
+            <div class="success-ring">🌍</div>
+            <div class="success-title">Money Sent</div>
+            <div class="success-amount" id="sadcSuccessAmt">R 500.00</div>
+            <div class="success-sub" id="sadcSuccessSub">Lesotho · arrives in minutes<br><strong style="color:var(--green);">Transfer fee: R0.00</strong><br>Competitor fee would have been R45.60</div>
+            <button class="btn-done" onclick="closeSuccess('sadcSuccess')">Done</button>
+          </div>
+        </div>
+
+      </div><!-- /phone-screen -->
+    </div><!-- /phone -->
+  </div><!-- /phone-wrap -->
+
+  <!-- EXPLAIN PANEL -->
+  <div class="explain" id="explainPanel">
+    <!-- filled by JS -->
+  </div>
+
+</div><!-- /scene -->
+
+<script>
+  // ── FLOW DEFINITIONS ──
+  const flows = {
+    receive: {
+      steps: [
+        { num:'1', title:'Any SA bank sends to your number', body:'FNB, Standard Bank, Capitec, Absa — anyone with a bank account sends money to your Marung number. Exactly like a normal Cash Send.', highlight:'' },
+        { num:'2', title:'Money arrives — and stays digital', body:'The money lands in your Marung wallet instantly. No ATM. No OTP that expires. No cash withdrawal required. <span class="highlight">It stays digital. Forever.</span>', highlight:'' },
+        { num:'3', title:'Spend anywhere, send anywhere', body:'Virtual Mastercard included. Pay at any shop, online, or send to Lesotho — all from the same wallet. <span class="highlight">R0 per transaction. Always.</span>', highlight:'' },
+      ],
+      fact: { label:'The Key Difference', text:'FNB eWallet gave <strong>69 million transactions worth R43 billion</strong> in 2025 — and forced every single recipient to queue at an ATM. Marung keeps it digital. That\'s the whole product.' },
+      screen: 'receive',
+      action: showReceive,
+    },
+    pay: {
+      steps: [
+        { num:'1', title:'Virtual Mastercard — included', body:'Every Marung wallet includes a virtual Mastercard debit card at no extra cost. No plastic. No waiting. Available the moment your wallet is created.', highlight:'' },
+        { num:'2', title:'Pay anywhere Mastercard is accepted', body:'Online stores, supermarkets, petrol stations, spaza shops via QR code. <span class="highlight">No transaction fee on any payment.</span> The R10/month covers everything.', highlight:'' },
+        { num:'3', title:'No bounce fees. Ever.', body:'Marung is prepaid — you spend what you have. No debit orders. No bounce fees. No bank calling to say you\'re R6 short and charging you R34 for it.', highlight:'' },
+      ],
+      fact: { label:'What This Means for Real People', text:'A domestic worker spending <strong>R85 at a spaza shop</strong> pays R0 in fees. Same transaction at Shoprite with a Capitec card: <strong>R6 per immediate payment</strong>. Over a year: <strong>R720 difference.</strong>' },
+      screen: 'pay',
+      action: showPay,
+    },
+    sadc: {
+      steps: [
+        { num:'1', title:'Choose your corridor', body:'Lesotho, Mozambique, Zimbabwe, Eswatini, Zambia — all SADC corridors are included in the R10/month subscription. No percentage. No hidden charge.', highlight:'' },
+        { num:'2', title:'Enter the amount — that\'s it', body:'No forms. No SWIFT codes. No waiting days. Enter the amount, confirm, and the money moves. <span class="highlight">Recipient gets the full amount — R0 fee deducted.</span>', highlight:'' },
+        { num:'3', title:'Arrives in minutes, not days', body:'Cross-border transfers via our infrastructure partner network — operational in 35 African nations. December remittance peak: every domestic worker sends home. Marung costs them nothing extra.', highlight:'' },
+      ],
+      fact: { label:'The Numbers That Matter', text:'Mukuru charges <strong>9.12% per transfer.</strong> A domestic worker sending R500 home loses <strong>R45.60</strong> every time. Marung charges <strong>R0.</strong> Over a year of monthly transfers: <strong>R547.20 returned to her family.</strong>' },
+      screen: 'sadc',
+      action: showSADC,
+    },
+  };
+
+  let currentFlow = 'receive';
+  let currentStep = 0;
+  let notifTimer = null;
+
+  function renderExplain(flowKey, activeStep) {
+    const flow = flows[flowKey];
+    const panel = document.getElementById('explainPanel');
+    let stepsHtml = flow.steps.map((s,i) => `
+      <div class="explain-step ${i===activeStep?'active':''}" onclick="activateStep(${i})">
+        <div class="step-num">${s.num}</div>
+        <div class="step-content">
+          <h4>${s.title}</h4>
+          <p>${s.body}</p>
+        </div>
+      </div>
+    `).join('');
+    panel.innerHTML = `
+      <div class="explain-steps">${stepsHtml}</div>
+      <div class="key-fact">
+        <div class="key-fact-label">${flow.fact.label}</div>
+        <p>${flow.fact.text}</p>
+      </div>
+    `;
+  }
+
+  function activateStep(i) {
+    currentStep = i;
+    renderExplain(currentFlow, i);
+    // Show corresponding screen action on step 1
+    if (i === 1) {
+      flows[currentFlow].action();
+    } else if (i === 0 || i === 2) {
+      if (currentFlow === 'receive') showNotif();
+    }
+  }
+
+  function switchFlow(flowKey, btn) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    currentFlow = flowKey;
+    currentStep = 0;
+    goHome();
+    renderExplain(flowKey, 0);
+    // Auto-trigger first action
+    setTimeout(() => {
+      if (flowKey === 'receive') showNotif();
+      else if (flowKey === 'pay') showPay();
+      else if (flowKey === 'sadc') showSADC();
+    }, 400);
+  }
+
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => {
+      s.classList.remove('active','exit');
+    });
+    document.getElementById('screen-home').classList.add('active');
+    setTimeout(() => {
+      document.getElementById('screen-home').classList.remove('active');
+      document.getElementById('screen-' + id).classList.add('active');
+    }, 50);
+  }
+
+  function goHome() {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active','exit'));
+    document.getElementById('screen-home').classList.add('active');
+    document.querySelectorAll('.success-overlay').forEach(s => s.classList.remove('show'));
+    clearTimeout(notifTimer);
+    document.getElementById('notif').classList.remove('show');
+  }
+
+  function showNotif() {
+    goHome();
+    clearTimeout(notifTimer);
+    notifTimer = setTimeout(() => {
+      document.getElementById('notif').classList.add('show');
+      // Update balance
+      document.getElementById('homeBalance').textContent = 'R 1,990.00';
+    }, 800);
+  }
+
+  function showReceive() {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-receive').classList.add('active');
+  }
+
+  function showPay() {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-pay').classList.add('active');
+    drawQR();
+  }
+
+  function showSADC() {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-sadc').classList.add('active');
+  }
+
+  function confirmPay() {
+    document.getElementById('paySuccess').classList.add('show');
+  }
+
+  function confirmSADC() {
+    const amt = document.getElementById('sadcAmount').value || 500;
+    document.getElementById('sadcSuccessAmt').textContent = 'R ' + parseFloat(amt).toFixed(2);
+    const competitor = (parseFloat(amt) * 0.0912).toFixed(2);
+    document.getElementById('sadcSuccessSub').innerHTML = `Lesotho · arrives in minutes<br><strong style="color:var(--green-light);">Transfer fee: R0.00</strong><br>Competitor would charge R${competitor}`;
+    document.getElementById('sadcSuccess').classList.add('show');
+  }
+
+  function closeSuccess(id) {
+    document.getElementById(id).classList.remove('show');
+    goHome();
+  }
+
+  function selectCorridor(id) {
+    document.querySelectorAll('.corridor-item').forEach(c => c.classList.remove('selected'));
+    document.getElementById('cor-' + id).classList.add('selected');
+  }
+
+  // SADC amount update
+  document.addEventListener('input', function(e) {
+    if (e.target.id === 'sadcAmount') {
+      document.getElementById('sendAmt').textContent = e.target.value || '0';
+    }
+  });
+
+  // Draw a simple QR-like pattern
+  function drawQR() {
+    const el = document.getElementById('qrCode');
+    if (!el || el.children.length > 0) return;
+    const pattern = [
+      1,1,1,1,1,1,1,0,1,
+      1,0,0,0,0,0,1,0,0,
+      1,0,1,1,1,0,1,0,1,
+      1,0,1,1,1,0,1,0,1,
+      1,0,0,0,0,0,1,0,0,
+      1,1,1,1,1,1,1,0,1,
+      0,0,0,0,0,0,0,0,1,
+      1,0,1,0,1,1,0,1,0,
+      0,1,1,0,1,0,1,0,1,
+    ];
+    const grid = document.createElement('div');
+    grid.style.cssText = 'display:grid;grid-template-columns:repeat(9,1fr);gap:2px;width:110px;height:110px;';
+    pattern.forEach((v, i) => {
+      const cell = document.createElement('div');
+      cell.style.cssText = `background:${v ? '#0A0A0A' : '#fff'};border-radius:1px;`;
+      grid.appendChild(cell);
+    });
+    el.appendChild(grid);
+  }
+
+  // INIT
+  renderExplain('receive', 0);
+  setTimeout(showNotif, 600);
+</script>
+</body>
+</html>
